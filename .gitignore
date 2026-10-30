@@ -9,3 +9,8 @@ progress/
 
 # Office lock files
 ~$*
+
+# Any other env or key files
+.env.*
+*.pem
+*.key
