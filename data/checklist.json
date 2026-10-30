@@ -1,0 +1,46 @@
+[
+  {"id": "arrays-strings", "group": "Coding fundamentals", "title": "Arrays and strings", "concepts": ["python:lists", "python:strings"]},
+  {"id": "hash-maps-sets", "group": "Coding fundamentals", "title": "Hash maps and sets", "concepts": ["python:dictionaries", "python:sets"]},
+  {"id": "loops-functions", "group": "Coding fundamentals", "title": "Loops, comprehensions and functions", "concepts": ["python:loops-comprehensions", "python:functions"]},
+  {"id": "error-handling", "group": "Coding fundamentals", "title": "Error handling and edge cases", "concepts": ["python:exceptions"]},
+  {"id": "oop-basics", "group": "Coding fundamentals", "title": "Classes and object design", "concepts": ["python:classes"]},
+  {"id": "big-o", "group": "Coding fundamentals", "title": "Big-O time and space", "concepts": ["python:big-o"]},
+
+  {"id": "stacks-queues", "group": "Data structures", "title": "Stacks and queues", "concepts": ["python:stacks-queues"]},
+  {"id": "linked-lists", "group": "Data structures", "title": "Linked lists", "concepts": ["python:linked-lists"]},
+  {"id": "trees", "group": "Data structures", "title": "Trees and BSTs", "concepts": ["python:trees"]},
+  {"id": "heaps", "group": "Data structures", "title": "Heaps and priority queues", "concepts": ["python:heaps"]},
+  {"id": "graphs", "group": "Data structures", "title": "Graphs (BFS, DFS, topological sort)", "concepts": ["python:graphs"]},
+
+  {"id": "sorting", "group": "Algorithms", "title": "Sorting and intervals", "concepts": ["python:sorting"]},
+  {"id": "two-pointers", "group": "Algorithms", "title": "Two pointers", "concepts": ["python:two-pointers"]},
+  {"id": "sliding-window", "group": "Algorithms", "title": "Sliding window", "concepts": ["python:sliding-window"]},
+  {"id": "recursion", "group": "Algorithms", "title": "Recursion and backtracking", "concepts": ["python:recursion"]},
+  {"id": "binary-search", "group": "Algorithms", "title": "Binary search", "concepts": ["python:binary-search"]},
+  {"id": "dynamic-programming", "group": "Algorithms", "title": "Dynamic programming", "concepts": ["python:dynamic-programming"]},
+
+  {"id": "sql-basics", "group": "Languages and tools", "title": "SQL: SELECT, filtering, joins", "concepts": ["sql:select-filter", "sql:joins"]},
+  {"id": "sql-advanced", "group": "Languages and tools", "title": "SQL: aggregation, subqueries, window functions", "concepts": ["sql:aggregation", "sql:subqueries-windows"]},
+  {"id": "javascript-core", "group": "Languages and tools", "title": "JavaScript core (arrays, objects, strings, functions)", "concepts": ["javascript:arrays", "javascript:objects", "javascript:strings", "javascript:functions-classes"]},
+  {"id": "javascript-async", "group": "Languages and tools", "title": "JavaScript async and the event loop", "concepts": ["javascript:async"]},
+  {"id": "python-conceptual", "group": "Languages and tools", "title": "Python concept questions (GIL, decorators, generators...)", "qa": "python", "need": 4},
+  {"id": "git", "group": "Languages and tools", "title": "Git (merge vs rebase, undoing changes)", "qa": "git", "need": 2},
+  {"id": "testing", "group": "Languages and tools", "title": "Testing and debugging", "qa": "testing", "need": 2},
+
+  {"id": "os-basics", "group": "CS fundamentals", "title": "Processes, threads and memory", "qa": "os", "need": 2},
+  {"id": "networking", "group": "CS fundamentals", "title": "Networking and HTTP basics", "qa": "networking", "need": 2},
+  {"id": "apis", "group": "CS fundamentals", "title": "APIs and REST", "qa": "apis", "need": 2},
+  {"id": "databases", "group": "CS fundamentals", "title": "Databases (indexes, ACID, SQL vs NoSQL)", "qa": "databases", "need": 3},
+  {"id": "concurrency", "group": "CS fundamentals", "title": "Concurrency (race conditions, deadlocks)", "qa": "concurrency", "need": 2},
+
+  {"id": "system-design-basics", "group": "Design", "title": "System design basics (caching, scaling, a simple design)", "qa": "system-design", "need": 2},
+
+  {"id": "behavioral-stories", "group": "Behavioral", "title": "Behavioral questions (STAR stories, strengths, why us)", "qa": "behavioral", "need": 5},
+  {"id": "questions-for-interviewer", "group": "Behavioral", "title": "Prepared questions to ask the interviewer", "manual": true},
+  {"id": "resume-walkthrough", "group": "Behavioral", "title": "Can walk through every line of the resume", "manual": true},
+
+  {"id": "think-aloud", "group": "Interview skills", "title": "Practised a timed mock coding interview", "auto": "mock-coding", "need": 1},
+  {"id": "mock-coding-reps", "group": "Interview skills", "title": "Three or more mock coding interviews", "auto": "mock-coding", "need": 3},
+  {"id": "mock-qa", "group": "Interview skills", "title": "Practised a mock questions interview", "auto": "mock-qa", "need": 1},
+  {"id": "target-role-prep", "group": "Interview skills", "title": "Built a prep plan for a real job or company", "auto": "prep", "need": 1}
+]

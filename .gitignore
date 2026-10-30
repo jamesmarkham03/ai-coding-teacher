@@ -4,9 +4,8 @@
 # Python
 __pycache__/
 
-# Personal progress and answers
-data/scores.json
-solutions/
+# Personal progress, answers and job descriptions
+progress/
 
 # Office lock files
 ~$*

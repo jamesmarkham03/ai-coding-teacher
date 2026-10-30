@@ -1,0 +1,340 @@
+[
+  {"id": "qa-py-list-tuple", "category": "Python", "tag": "python", "concept": "python:lists",
+   "prompt": "What is the difference between a list and a tuple in Python? When would you use each?",
+   "key_points": [
+     {"point": "Lists are mutable, tuples are immutable", "keywords": ["mutable", "immutable", "can change", "cannot change", "can't change"]},
+     {"point": "Tuples can be dictionary keys / set members because they are hashable", "keywords": ["hash", "dictionary key", "dict key", "set"]},
+     {"point": "Use tuples for fixed records (like a coordinate), lists for collections that grow or change", "keywords": ["fixed", "record", "coordinate", "grow", "collection", "pair"]}
+   ],
+   "sample_answer": "A list is mutable: you can append, remove and reassign items. A tuple is immutable, so it is safe to use as a dictionary key or set member (it is hashable) and signals a fixed record like (x, y). I use lists for collections that change and tuples for small fixed groups."},
+  {"id": "qa-py-dict", "category": "Python", "tag": "python", "concept": "python:dictionaries",
+   "prompt": "How does a Python dictionary work, and what is the time complexity of a lookup?",
+   "key_points": [
+     {"point": "It is a hash table: the key is hashed to find where the value lives", "keywords": ["hash"]},
+     {"point": "Lookup, insert and delete are O(1) on average", "keywords": ["o(1)", "constant", "average"]},
+     {"point": "Collisions can make the worst case O(n)", "keywords": ["collision", "worst", "o(n)"]},
+     {"point": "Keys must be hashable (immutable)", "keywords": ["hashable", "immutable", "list can't", "lists can't", "tuple"]}
+   ],
+   "sample_answer": "A dict is a hash table. Python hashes the key to pick a slot, so lookup, insert and delete are O(1) on average. Collisions are handled internally, and in a pathological case they degrade to O(n). Keys must be hashable, which is why lists can't be keys but tuples and strings can."},
+  {"id": "qa-py-is-eq", "category": "Python", "tag": "python", "concept": "python:functions",
+   "prompt": "What is the difference between `==` and `is` in Python?",
+   "key_points": [
+     {"point": "== compares values for equality", "keywords": ["value", "equal"]},
+     {"point": "is checks whether two names point to the exact same object (identity)", "keywords": ["identity", "same object", "memory", "id(", "same instance"]},
+     {"point": "Use `is None` / `is not None` for None checks", "keywords": ["none"]}
+   ],
+   "sample_answer": "== asks 'do these have equal values?'. `is` asks 'are these the very same object in memory?'. Two equal lists are == but not `is`. The one place I use `is` is `x is None`."},
+  {"id": "qa-py-generators", "category": "Python", "tag": "python", "concept": "python:loops-comprehensions",
+   "prompt": "What is a generator in Python and why would you use one?",
+   "key_points": [
+     {"point": "A function that uses yield and produces values one at a time", "keywords": ["yield"]},
+     {"point": "Lazy: values are computed on demand, not all at once", "keywords": ["lazy", "on demand", "one at a time", "as needed"]},
+     {"point": "Saves memory for large or infinite sequences", "keywords": ["memory", "large", "infinite", "stream"]},
+     {"point": "Can only be iterated once", "keywords": ["once", "exhaust", "single use", "single-use"]}
+   ],
+   "sample_answer": "A generator is a function with yield. It hands back one value at a time and pauses, so values are computed lazily. That saves memory on big or endless sequences (like reading a huge file line by line). The trade-off is you can only loop over it once."},
+  {"id": "qa-py-mutable-default", "category": "Python", "tag": "python", "concept": "python:functions",
+   "prompt": "What goes wrong with `def add(item, items=[])`, and how do you fix it?",
+   "key_points": [
+     {"point": "The default list is created once, when the function is defined", "keywords": ["once", "defined", "definition", "created when"]},
+     {"point": "All calls share the same list, so changes pile up between calls", "keywords": ["shared", "share", "same list", "persist", "accumulate", "pile"]},
+     {"point": "Fix: use items=None and create a new list inside the function", "keywords": ["none"]}
+   ],
+   "sample_answer": "Default values are evaluated once at definition time, so every call that uses the default shares one list and the appends accumulate. The fix is `items=None`, then `if items is None: items = []` inside the function."},
+  {"id": "qa-py-decorator", "category": "Python", "tag": "python", "concept": "python:functions",
+   "prompt": "What is a decorator in Python?",
+   "key_points": [
+     {"point": "A function that takes a function and returns a new (wrapped) function", "keywords": ["takes a function", "takes another function", "another function", "wrap", "returns a function", "takes in a function", "higher-order", "higher order"]},
+     {"point": "Applied with the @ syntax above a function", "keywords": ["@"]},
+     {"point": "Common uses: logging, timing, caching, access checks", "keywords": ["logging", "timing", "cache", "caching", "auth", "permission", "retry"]}
+   ],
+   "sample_answer": "A decorator is a function that takes another function and returns an enhanced version of it. Writing @timer above a function is shorthand for func = timer(func). Typical uses are logging, timing, caching and permission checks."},
+  {"id": "qa-py-gil", "category": "Python", "tag": "python", "concept": "python:functions",
+   "prompt": "What is the GIL, and how does it affect multithreading in Python?",
+   "key_points": [
+     {"point": "The Global Interpreter Lock lets only one thread run Python bytecode at a time", "keywords": ["one thread", "single thread", "one at a time", "global interpreter lock"]},
+     {"point": "So threads don't speed up CPU-bound work", "keywords": ["cpu", "compute"]},
+     {"point": "Use multiprocessing for CPU work; threads or asyncio are fine for I/O waiting", "keywords": ["multiprocessing", "process", "asyncio", "i/o", "io-bound", "io bound", "network"]}
+   ],
+   "sample_answer": "The GIL means only one thread executes Python bytecode at a time in CPython. CPU-bound threads therefore don't run in parallel, so I'd use multiprocessing for heavy computation. For I/O-bound work like network calls, threads or asyncio still help because the GIL is released while waiting."},
+  {"id": "qa-py-errors", "category": "Python", "tag": "python", "concept": "python:exceptions",
+   "prompt": "How do you handle errors in Python, and what is the `finally` block for?",
+   "key_points": [
+     {"point": "try / except catches specific exceptions", "keywords": ["try", "except", "specific"]},
+     {"point": "else runs if nothing went wrong", "keywords": ["else"]},
+     {"point": "finally always runs, so it is for cleanup (closing files, releasing locks)", "keywords": ["finally", "always", "cleanup", "clean up", "close"]},
+     {"point": "Avoid bare except; raise your own errors when input is invalid", "keywords": ["bare", "raise", "swallow", "hide"]}
+   ],
+   "sample_answer": "I wrap risky code in try and catch the specific exceptions I expect, such as ValueError. else runs when nothing failed, and finally always runs, which is where cleanup like closing a file belongs (or use a with statement). I avoid a bare except because it hides real bugs, and I raise my own errors for invalid input."},
+  {"id": "qa-py-bigo", "category": "Python", "tag": "python", "concept": "python:big-o",
+   "prompt": "What is Big-O notation and why does it matter?",
+   "key_points": [
+     {"point": "Describes how running time or memory grows as the input size grows", "keywords": ["grow", "scale", "input size", "as n"]},
+     {"point": "Ignores constants and small terms; looks at the worst or dominant term", "keywords": ["constant", "dominant", "worst", "drop"]},
+     {"point": "Lets you compare approaches before running them, e.g. O(n) vs O(n^2)", "keywords": ["compare", "o(n", "n^2", "n squared", "log n"]}
+   ],
+   "sample_answer": "Big-O describes how time or space grows as the input grows, ignoring constants and lower-order terms. It lets me compare approaches before coding, for example a hash-set lookup O(1) versus scanning a list O(n), and spot solutions that won't scale."},
+  {"id": "qa-py-bfs-dfs", "category": "Python", "tag": "python", "concept": "python:graphs",
+   "prompt": "How do you decide between BFS and DFS?",
+   "key_points": [
+     {"point": "BFS uses a queue and explores level by level, so it finds the shortest path in an unweighted graph", "keywords": ["shortest", "level", "queue"]},
+     {"point": "DFS uses a stack or recursion and goes deep first; good for exploring all paths, cycles, connected groups", "keywords": ["stack", "recursion", "deep", "backtrack", "cycle", "connected"]},
+     {"point": "Both are O(V + E)", "keywords": ["o(v", "v + e", "v+e", "vertices", "edges"]}
+   ],
+   "sample_answer": "If I need the shortest path in an unweighted graph or something level by level, I use BFS with a queue. If I need to explore everything, detect cycles, count connected groups or backtrack, DFS with a stack or recursion is natural. Both visit each node and edge once: O(V + E)."},
+
+  {"id": "qa-os-process-thread", "category": "Operating systems", "tag": "os",
+   "prompt": "What is the difference between a process and a thread?",
+   "key_points": [
+     {"point": "A process has its own memory space; processes are isolated from each other", "keywords": ["own memory", "separate memory", "isolated", "memory space"]},
+     {"point": "Threads live inside a process and share its memory", "keywords": ["share", "same process", "within a process", "inside a process"]},
+     {"point": "Threads are cheaper to create and switch between", "keywords": ["lightweight", "cheaper", "faster", "overhead", "light"]},
+     {"point": "Shared memory means threads need synchronization (locks) to avoid races", "keywords": ["lock", "race", "synchron", "mutex"]}
+   ],
+   "sample_answer": "A process is a running program with its own memory space. Threads are lightweight units of execution inside a process and share its memory, so they are cheaper to create and switch, but you need locks to avoid race conditions. Processes are isolated, which is safer but communication is heavier."},
+  {"id": "qa-os-stack-heap", "category": "Operating systems", "tag": "os",
+   "prompt": "What is the difference between the stack and the heap in memory?",
+   "key_points": [
+     {"point": "The stack holds function calls and local variables and is freed automatically when the function returns", "keywords": ["function call", "local", "automatic", "returns", "lifo"]},
+     {"point": "The heap holds dynamically allocated objects that can outlive a function call", "keywords": ["dynamic", "allocated", "outlive", "objects", "long-lived", "long lived"]},
+     {"point": "Too-deep recursion overflows the stack; forgotten heap memory leaks", "keywords": ["overflow", "leak", "garbage", "recursion"]}
+   ],
+   "sample_answer": "The stack stores call frames and local variables, and it is cleaned up automatically as functions return. The heap stores dynamically allocated objects that can live longer than one call. Runaway recursion causes a stack overflow, and unreleased heap memory causes leaks (or is reclaimed by a garbage collector)."},
+
+  {"id": "qa-net-url", "category": "Networking", "tag": "networking",
+   "prompt": "What happens when you type a URL into a browser and press Enter?",
+   "key_points": [
+     {"point": "DNS lookup turns the domain name into an IP address", "keywords": ["dns", "ip address"]},
+     {"point": "The browser opens a TCP connection (and a TLS handshake for HTTPS)", "keywords": ["tcp", "tls", "handshake", "https", "connection"]},
+     {"point": "It sends an HTTP request and the server returns a response", "keywords": ["http request", "request", "get "]},
+     {"point": "The browser parses the HTML and loads more resources (CSS, JS, images) to render the page", "keywords": ["render", "parse", "html", "css", "javascript"]}
+   ],
+   "sample_answer": "The browser resolves the domain through DNS to an IP, opens a TCP connection and does a TLS handshake for HTTPS, sends an HTTP GET request, and the server responds with HTML. The browser parses it, fetches CSS, JS and images, and renders the page."},
+  {"id": "qa-net-tcp-udp", "category": "Networking", "tag": "networking",
+   "prompt": "What is the difference between TCP and UDP?",
+   "key_points": [
+     {"point": "TCP is connection-based and reliable: ordered delivery with retransmission", "keywords": ["reliable", "ordered", "handshake", "connection", "retransmi", "guarantee"]},
+     {"point": "UDP is connectionless with no delivery guarantee, but it is faster with less overhead", "keywords": ["connectionless", "no guarantee", "unreliable", "fast", "overhead", "lightweight"]},
+     {"point": "TCP for web pages and file transfer; UDP for video calls, games, DNS", "keywords": ["video", "game", "dns", "streaming", "voip", "web", "file"]}
+   ],
+   "sample_answer": "TCP sets up a connection and guarantees ordered, reliable delivery, which is why web traffic and file transfers use it. UDP just sends packets with no guarantee, which makes it faster and lighter, so it suits live video, games and DNS lookups where late data is worse than lost data."},
+
+  {"id": "qa-api-rest", "category": "APIs", "tag": "apis",
+   "prompt": "What is a REST API, and what do GET, POST, PUT and DELETE mean?",
+   "key_points": [
+     {"point": "Resources are identified by URLs and manipulated with standard HTTP methods", "keywords": ["resource", "url", "endpoint"]},
+     {"point": "GET reads, POST creates", "keywords": ["get", "read", "fetch", "post", "create"]},
+     {"point": "PUT updates/replaces, DELETE removes", "keywords": ["put", "update", "replace", "delete", "remove"]},
+     {"point": "Stateless: each request carries everything the server needs", "keywords": ["stateless", "state"]}
+   ],
+   "sample_answer": "REST models things as resources with URLs, e.g. /players/12, and uses HTTP methods on them: GET reads, POST creates, PUT updates or replaces, DELETE removes. It is stateless, so every request carries what the server needs to answer it."},
+  {"id": "qa-api-status", "category": "APIs", "tag": "apis",
+   "prompt": "What do the HTTP status codes 200, 201, 400, 401, 404 and 500 mean?",
+   "key_points": [
+     {"point": "200 OK and 201 Created are successes", "keywords": ["200", "ok", "success", "201", "created"]},
+     {"point": "400 is a bad request (client sent something invalid)", "keywords": ["400", "bad request", "invalid"]},
+     {"point": "401 means not authenticated / unauthorized", "keywords": ["401", "unauthori", "authenticat", "login"]},
+     {"point": "404 means not found", "keywords": ["404", "not found"]},
+     {"point": "500 means server error", "keywords": ["500", "server error", "internal"]}
+   ],
+   "sample_answer": "200 OK and 201 Created are success. 400 means the request was invalid, 401 means you aren't authenticated, 404 means the resource wasn't found, and 500 means the server hit an error. Roughly: 2xx success, 4xx the client's fault, 5xx the server's fault."},
+  {"id": "qa-api-idempotent", "category": "APIs", "tag": "apis",
+   "prompt": "What does it mean for an operation to be idempotent? Give an example.",
+   "key_points": [
+     {"point": "Doing it once or many times has the same effect", "keywords": ["same result", "same effect", "multiple times", "repeat", "many times", "twice"]},
+     {"point": "Examples: GET, PUT and DELETE are idempotent; POST usually isn't", "keywords": ["put", "delete", "get", "post"]},
+     {"point": "It makes retries safe, e.g. avoiding double charges", "keywords": ["retry", "retries", "safe", "payment", "duplicate", "charge"]}
+   ],
+   "sample_answer": "An idempotent operation gives the same end result no matter how many times you apply it. Deleting item 5 twice still leaves it deleted. That matters for retries: a network timeout on a payment shouldn't charge twice, which is why payment APIs use idempotency keys."},
+
+  {"id": "qa-db-index", "category": "Databases", "tag": "databases",
+   "prompt": "What is a database index and what are the trade-offs?",
+   "key_points": [
+     {"point": "It speeds up reads and lookups, like the index of a book (often a B-tree)", "keywords": ["faster", "speed", "lookup", "read", "b-tree", "book", "search"]},
+     {"point": "It costs extra storage", "keywords": ["storage", "space", "memory", "disk"]},
+     {"point": "It slows down writes (inserts and updates must update the index)", "keywords": ["slow", "write", "insert", "update"]},
+     {"point": "Index columns used in WHERE, JOIN and ORDER BY", "keywords": ["where", "join", "order by", "filter"]}
+   ],
+   "sample_answer": "An index is an extra structure, usually a B-tree, that lets the database find rows without scanning the whole table, like a book's index. The trade-offs are extra storage and slower writes because every insert or update must also update the index. I index columns used in WHERE, JOIN and ORDER BY."},
+  {"id": "qa-db-joins", "category": "Databases", "tag": "databases", "concept": "sql:joins",
+   "prompt": "Explain INNER JOIN versus LEFT JOIN.",
+   "key_points": [
+     {"point": "Joins combine rows from tables using a matching column", "keywords": ["combine", "match", "key", "on "]},
+     {"point": "INNER JOIN returns only rows that match on both sides", "keywords": ["inner", "only", "both"]},
+     {"point": "LEFT JOIN keeps every row from the left table and fills missing right columns with NULL", "keywords": ["left", "null", "all rows", "every row"]}
+   ],
+   "sample_answer": "A join combines tables on a matching column. INNER JOIN keeps only rows with a match on both sides. LEFT JOIN keeps every row from the left table and puts NULL where the right side has no match, which is also how you find rows with no match."},
+  {"id": "qa-db-normalization", "category": "Databases", "tag": "databases",
+   "prompt": "What is database normalization, and when might you denormalize?",
+   "key_points": [
+     {"point": "Organizing data into separate tables to reduce duplication", "keywords": ["duplicate", "duplication", "redundan", "repeat"]},
+     {"point": "Tables are linked with keys (primary and foreign keys)", "keywords": ["foreign key", "primary key", "key", "relationship"]},
+     {"point": "Denormalizing trades some duplication for faster reads by avoiding joins", "keywords": ["denormal", "join", "faster", "read", "performance"]}
+   ],
+   "sample_answer": "Normalization splits data into related tables so each fact is stored once, linked by primary and foreign keys. That prevents inconsistent duplicates. In read-heavy systems I might denormalize on purpose to avoid expensive joins, accepting some duplication."},
+  {"id": "qa-db-acid", "category": "Databases", "tag": "databases",
+   "prompt": "What does ACID mean for database transactions?",
+   "key_points": [
+     {"point": "Atomicity: all of a transaction happens or none of it", "keywords": ["atomic", "all or nothing", "all-or-nothing"]},
+     {"point": "Consistency: the database moves from one valid state to another", "keywords": ["consisten", "valid state", "rules", "constraint"]},
+     {"point": "Isolation: concurrent transactions don't interfere", "keywords": ["isolat", "concurrent", "interfere"]},
+     {"point": "Durability: committed data survives a crash", "keywords": ["durab", "crash", "persist", "committed"]}
+   ],
+   "sample_answer": "Atomicity: a transaction fully happens or not at all. Consistency: it leaves the data in a valid state. Isolation: concurrent transactions don't see each other's half-finished work. Durability: once committed, the data survives a crash. A bank transfer is the classic example."},
+  {"id": "qa-db-sql-nosql", "category": "Databases", "tag": "databases",
+   "prompt": "SQL versus NoSQL: how do you choose?",
+   "key_points": [
+     {"point": "SQL/relational: fixed schema, relationships, joins and strong transactions", "keywords": ["schema", "relational", "join", "transaction", "structured"]},
+     {"point": "NoSQL: flexible data shapes (documents, key-value) and easier horizontal scaling", "keywords": ["flexible", "document", "key-value", "scale", "horizontal"]},
+     {"point": "The choice depends on access patterns and requirements, not hype", "keywords": ["depends", "access pattern", "use case", "requirement"]}
+   ],
+   "sample_answer": "I start with the data and how it is accessed. If it is structured and relational with joins and transactions, SQL is the default. If I need flexible document shapes or huge horizontal scale for simple access patterns, a NoSQL store can fit. It depends on the access pattern."},
+
+  {"id": "qa-conc-race", "category": "Concurrency", "tag": "concurrency",
+   "prompt": "What is a race condition and how do you prevent one?",
+   "key_points": [
+     {"point": "Two or more threads/processes touch shared data at the same time", "keywords": ["shared", "same time", "simultaneous", "concurrent"]},
+     {"point": "The result depends on unpredictable timing or ordering", "keywords": ["timing", "order", "unpredictable", "inconsistent", "depends"]},
+     {"point": "Prevent with locks/mutexes, atomic operations, queues, or by avoiding shared mutable state", "keywords": ["lock", "mutex", "atomic", "queue", "immutable", "synchron"]}
+   ],
+   "sample_answer": "A race condition is when two threads read and write shared data at the same time and the result depends on timing, like two threads incrementing one counter and losing an update. I prevent it with locks or atomic operations, message queues, or by avoiding shared mutable state."},
+  {"id": "qa-conc-deadlock", "category": "Concurrency", "tag": "concurrency",
+   "prompt": "What is a deadlock and how can you avoid one?",
+   "key_points": [
+     {"point": "Two or more tasks wait on each other forever, each holding something the other needs", "keywords": ["wait", "each other", "circular", "cycle", "forever", "stuck"]},
+     {"point": "It usually involves locks or resources acquired in different orders", "keywords": ["lock", "resource", "different order"]},
+     {"point": "Avoid with a consistent lock order, timeouts, or fewer locks", "keywords": ["order", "timeout", "fewer", "try-lock", "trylock"]}
+   ],
+   "sample_answer": "A deadlock is when thread A holds lock 1 and waits for lock 2 while thread B holds lock 2 and waits for lock 1, so neither can continue. I avoid it by always acquiring locks in the same order, using timeouts, or holding fewer locks."},
+
+  {"id": "qa-git-merge-rebase", "category": "Git", "tag": "git",
+   "prompt": "What is the difference between git merge and git rebase?",
+   "key_points": [
+     {"point": "Merge joins two branches with a merge commit and keeps history as it happened", "keywords": ["merge commit", "preserve", "history", "keeps"]},
+     {"point": "Rebase replays your commits on top of another branch for a linear history", "keywords": ["replay", "linear", "on top", "reapply", "rewrite"]},
+     {"point": "Don't rebase branches other people share", "keywords": ["shared", "public", "force", "others", "team"]}
+   ],
+   "sample_answer": "Merge combines branches and records a merge commit, preserving the true history. Rebase moves my commits onto the tip of another branch, giving a clean linear history but rewriting commits. I never rebase a branch others are using."},
+  {"id": "qa-git-undo", "category": "Git", "tag": "git",
+   "prompt": "How do you undo your last commit in Git?",
+   "key_points": [
+     {"point": "git revert makes a new commit that undoes it; safe for shared history", "keywords": ["revert", "new commit", "safe"]},
+     {"point": "git reset moves the branch back; --soft keeps changes staged, --hard discards them", "keywords": ["reset", "soft", "hard"]},
+     {"point": "Only reset commits you haven't pushed", "keywords": ["push", "shared", "local"]}
+   ],
+   "sample_answer": "If it is already pushed or shared I use git revert, which adds a new commit that reverses it. If it is only local I can git reset --soft HEAD~1 to keep the changes staged, or --hard to discard them."},
+
+  {"id": "qa-test-unit-int", "category": "Testing", "tag": "testing",
+   "prompt": "What is the difference between a unit test and an integration test?",
+   "key_points": [
+     {"point": "Unit tests check one small piece (a function) in isolation and run fast", "keywords": ["unit", "isolation", "small", "single", "function", "fast"]},
+     {"point": "Integration tests check that several parts work together (database, API, services)", "keywords": ["integration", "together", "database", "components", "services"]},
+     {"point": "Mocks/stubs stand in for slow or external dependencies in unit tests", "keywords": ["mock", "stub", "fake", "dependency"]},
+     {"point": "Test pyramid: many unit tests, fewer integration, very few end-to-end", "keywords": ["pyramid", "many", "few", "end-to-end", "e2e"]}
+   ],
+   "sample_answer": "A unit test checks one function or class in isolation, with mocks for dependencies, and runs in milliseconds. An integration test checks that parts such as the code and a real database work together. The test pyramid says write many unit tests, fewer integration tests and very few end-to-end tests."},
+  {"id": "qa-test-debug", "category": "Testing", "tag": "testing",
+   "prompt": "A function returns the wrong answer. Walk me through how you would debug it.",
+   "key_points": [
+     {"point": "Reproduce the bug with the smallest input that fails", "keywords": ["reproduce", "small", "minimal", "simplest"]},
+     {"point": "Inspect values with prints or a debugger and step through", "keywords": ["print", "debugger", "breakpoint", "step", "log"]},
+     {"point": "Check assumptions and edge cases (empty, one item, duplicates, negatives)", "keywords": ["assumption", "edge case", "empty", "boundary"]},
+     {"point": "Add a test that fails, fix the bug, and see the test pass", "keywords": ["test", "regression"]}
+   ],
+   "sample_answer": "I reproduce it with the smallest failing input, then check my assumptions and edge cases like empty input or duplicates. I step through with a debugger or add prints to find where the actual value first differs from what I expected. Then I write a failing test, fix it, and confirm the test passes."},
+
+  {"id": "qa-sd-shortener", "category": "System design", "tag": "system-design",
+   "prompt": "At a high level, how would you design a URL shortener?",
+   "key_points": [
+     {"point": "Generate a short unique id for each URL (counter + base62, or a hash)", "keywords": ["base62", "hash", "counter", "unique id", "encode", "random"]},
+     {"point": "Store the id -> long URL mapping in a database or key-value store", "keywords": ["database", "store", "mapping", "key-value", "table"]},
+     {"point": "Redirects are read-heavy, so add a cache", "keywords": ["cache", "read-heavy", "read heavy", "redis", "redirect"]},
+     {"point": "Consider collisions, expiry, scaling and analytics", "keywords": ["collision", "expir", "scale", "analytics", "rate limit"]}
+   ],
+   "sample_answer": "A POST takes a long URL, creates a short id (an auto-incrementing counter encoded in base62), and stores id -> URL in a database. A GET on the short id looks it up and returns a 301/302 redirect. Reads vastly outnumber writes, so I'd put a cache in front, and I'd think about collisions, expiry and scaling the database."},
+  {"id": "qa-sd-cache", "category": "System design", "tag": "system-design",
+   "prompt": "What is caching, and when would you add a cache?",
+   "key_points": [
+     {"point": "Store frequently used results in fast storage (memory) to avoid recomputing or re-fetching", "keywords": ["frequent", "fast", "memory", "store", "avoid"]},
+     {"point": "Reduces latency and load on the database or service", "keywords": ["latency", "load", "database", "faster"]},
+     {"point": "Hard part: invalidation and stale data (TTLs, write-through)", "keywords": ["invalidat", "stale", "ttl", "expire", "consisten"]}
+   ],
+   "sample_answer": "A cache keeps hot data in fast storage like memory so repeated requests skip slow work, lowering latency and database load. I add one when reads dominate and the data tolerates a little staleness. The hard part is invalidation, which I handle with TTLs or by updating the cache on writes."},
+  {"id": "qa-sd-scale", "category": "System design", "tag": "system-design",
+   "prompt": "A web app gets slow under heavy load. How would you approach scaling it?",
+   "key_points": [
+     {"point": "Measure first to find the bottleneck (monitoring, profiling)", "keywords": ["measure", "bottleneck", "profile", "monitor", "metrics"]},
+     {"point": "Scale horizontally behind a load balancer", "keywords": ["load balancer", "horizontal", "more servers", "instances"]},
+     {"point": "Add caching or a CDN for repeated content", "keywords": ["cache", "cdn"]},
+     {"point": "Fix the database: indexes, read replicas, sharding", "keywords": ["replica", "index", "shard", "database"]}
+   ],
+   "sample_answer": "First I measure to find the real bottleneck instead of guessing. Then depending on the cause: add servers behind a load balancer, cache or use a CDN for repeated content, and relieve the database with indexes, read replicas or eventually sharding."},
+
+  {"id": "qa-beh-intro", "category": "Behavioral", "tag": "behavioral",
+   "prompt": "Tell me about yourself.",
+   "key_points": [
+     {"point": "Present: what you are doing now", "keywords": ["currently", "right now", "student", "master", "working", "i am"]},
+     {"point": "Past: the background that got you here", "keywords": ["before", "previously", "experience", "background", "coach", "played", "grew up"]},
+     {"point": "Future: what you are looking for and why this role", "keywords": ["looking for", "want to", "excited", "goal", "next", "interested"]}
+   ],
+   "sample_answer": "Use present, past, future in about 60 seconds. Present: what you do now. Past: the one or two experiences that shaped you and the skills they gave you. Future: why you want this role. Practise it until it is smooth but not memorized."},
+  {"id": "qa-beh-conflict", "category": "Behavioral", "tag": "behavioral",
+   "prompt": "Tell me about a time you disagreed with someone you worked with. What happened?",
+   "key_points": [
+     {"point": "Situation: the context and the disagreement", "keywords": ["situation", "when i", "at the time", "last", "season", "project", "team", "disagree"]},
+     {"point": "Task: what you were responsible for or trying to achieve", "keywords": ["goal", "task", "my job", "responsible", "needed to", "had to"]},
+     {"point": "Action: what you personally did (listened, asked, proposed)", "keywords": ["so i", "i decided", "i started", "i talked", "i asked", "i listened", "i suggested", "i proposed", "i explained"]},
+     {"point": "Result: the outcome and what you learned", "keywords": ["result", "outcome", "in the end", "as a result", "learned", "agreed", "improved"]}
+   ],
+   "sample_answer": "Use STAR: Situation, Task, Action, Result. Choose a real, low-drama disagreement. Spend most of the time on what YOU did (listened, found the shared goal, proposed a test or compromise) and end with a concrete result plus what you would repeat next time."},
+  {"id": "qa-beh-failure", "category": "Behavioral", "tag": "behavioral",
+   "prompt": "Tell me about a time you failed or made a mistake.",
+   "key_points": [
+     {"point": "Situation and what went wrong, owned honestly", "keywords": ["situation", "mistake", "failed", "wrong", "my fault", "i missed", "i forgot"]},
+     {"point": "Action: how you fixed it or responded", "keywords": ["so i", "i fixed", "i apologized", "i started", "i changed", "i created", "i asked", "i made sure"]},
+     {"point": "Result and lesson: what you do differently now", "keywords": ["learned", "lesson", "now i", "since then", "result", "next time", "improved"]}
+   ],
+   "sample_answer": "Pick a real mistake that is not a disaster, own it without blaming others, show what you did to fix it, and finish with the specific habit you changed afterwards. Interviewers are scoring honesty and growth, not perfection."},
+  {"id": "qa-beh-lead", "category": "Behavioral", "tag": "behavioral",
+   "prompt": "Tell me about a time you led a team or took ownership of something.",
+   "key_points": [
+     {"point": "Situation: what needed leading or owning", "keywords": ["situation", "team", "season", "project", "when i", "responsible"]},
+     {"point": "Task: your responsibility or goal", "keywords": ["goal", "task", "my job", "responsible", "needed to", "had to"]},
+     {"point": "Action: specific things you did to organize, motivate or decide", "keywords": ["i organized", "i planned", "i led", "i set", "i decided", "i built", "i taught", "i created", "so i"]},
+     {"point": "Result: measurable outcome", "keywords": ["result", "outcome", "improved", "increased", "reduced", "won", "%", "grew"]}
+   ],
+   "sample_answer": "Choose a story where you were the one responsible, for example running a team for a season. Use STAR, include a number or visible result, and say how you adjusted when something did not go to plan."},
+  {"id": "qa-beh-technical", "category": "Behavioral", "tag": "behavioral",
+   "prompt": "Describe a difficult technical or analytical problem you solved.",
+   "key_points": [
+     {"point": "The problem and why it was hard", "keywords": ["problem", "challenge", "difficult", "hard", "situation"]},
+     {"point": "Your approach: how you broke it down and what you tried", "keywords": ["i broke", "i tried", "i tested", "i researched", "approach", "i started by", "step"]},
+     {"point": "The result, and how you know it worked", "keywords": ["result", "worked", "improved", "faster", "accuracy", "fixed", "measured"]},
+     {"point": "What you would do differently or learned", "keywords": ["learned", "next time", "differently", "lesson"]}
+   ],
+   "sample_answer": "State the problem and the constraint that made it hard, walk through how you broke it into pieces and what you tried (including what failed), give a measurable result, and end with a lesson. Keep the technical detail at the level of your audience."},
+  {"id": "qa-beh-why", "category": "Behavioral", "tag": "behavioral",
+   "prompt": "Why do you want to work here?",
+   "key_points": [
+     {"point": "Something specific about the company's product, mission or team", "keywords": ["product", "mission", "team", "your", "customers", "users", "problem"]},
+     {"point": "How your skills and experience fit the role", "keywords": ["skills", "experience", "fit", "role", "background", "bring"]},
+     {"point": "What you want to learn and contribute", "keywords": ["learn", "grow", "contribute", "impact", "opportunity"]}
+   ],
+   "sample_answer": "Research the company first (use the company-research skill), then give three parts: one specific thing about their product or mission that interests you, how your background fits the role, and what you hope to learn and contribute. Avoid generic answers that could be about any company."},
+  {"id": "qa-beh-strengths", "category": "Behavioral", "tag": "behavioral",
+   "prompt": "What are your strengths and weaknesses?",
+   "key_points": [
+     {"point": "A real strength backed by a specific example", "keywords": ["example", "for instance", "when i", "strength is", "i am good at", "i'm good at"]},
+     {"point": "A real, non-fatal weakness", "keywords": ["weakness", "struggle", "used to", "tend to"]},
+     {"point": "What you are doing to improve the weakness", "keywords": ["working on", "improve", "learning", "practice", "now i", "i have started", "i've started"]}
+   ],
+   "sample_answer": "Name one strength that matters for the job and prove it with a one-sentence example. For the weakness, pick something real but not critical to the role, and describe the concrete steps you are taking to improve it."},
+  {"id": "qa-beh-questions", "category": "Behavioral", "tag": "behavioral",
+   "prompt": "Do you have any questions for us?",
+   "key_points": [
+     {"point": "Ask about the team and the day-to-day work", "keywords": ["team", "day-to-day", "day to day", "work on", "typical day", "project"]},
+     {"point": "Ask what success looks like and how you would grow", "keywords": ["success", "grow", "expect", "onboarding", "first 90", "first three months", "mentor"]},
+     {"point": "Ask about the process and next steps", "keywords": ["next steps", "process", "timeline", "interview"]}
+   ],
+   "sample_answer": "Always have 3 to 5 prepared. Good ones: 'What does a typical week look like on this team?', 'What would success look like in the first three months?', 'How does the team handle code review and mentoring?', and 'What are the next steps in the process?'. Never say 'no'."}
+]

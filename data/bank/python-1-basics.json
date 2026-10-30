@@ -1,0 +1,586 @@
+[
+  {"id": "py-lists-q1", "language": "python", "concept": "lists", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `[1, 2, 3][-1]` return?", "answer": "3",
+   "explanation": "A negative index counts from the end, so -1 is the last item."},
+  {"id": "py-lists-q2", "language": "python", "concept": "lists", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `[10, 20, 30, 40][1:3]` return?", "answer": "[20, 30]",
+   "explanation": "A slice starts at index 1 and stops BEFORE index 3, so you get the items at positions 1 and 2."},
+  {"id": "py-lists-c1", "language": "python", "concept": "lists", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write remove_duplicates(nums). Return a new list with duplicates removed, keeping the first time each number appears.\nExample: [1, 2, 1, 3, 2] -> [1, 2, 3]",
+   "function": "remove_duplicates", "params": "nums",
+   "hint": "Keep a set of numbers you've already seen. Add to the result only when the number isn't in the set.",
+   "complexity": {"time": "O(n)", "space": "O(n)"},
+   "tests": [
+     {"args": [[1, 2, 1, 3, 2]], "expected": [1, 2, 3]},
+     {"args": [[]], "expected": []},
+     {"args": [[5, 5, 5]], "expected": [5]}
+   ],
+   "solution": [
+     "def remove_duplicates(nums):",
+     "    seen = set()",
+     "    result = []",
+     "    for n in nums:",
+     "        if n not in seen:",
+     "            seen.add(n)",
+     "            result.append(n)",
+     "    return result"
+   ]},
+  {"id": "py-lists-c2", "language": "python", "concept": "lists", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write max_profit(prices). prices[i] is a stock price on day i. Buy on one day and sell on a LATER day. Return the biggest profit possible, or 0 if you can't make one.\nExample: [7, 1, 5, 3, 6, 4] -> 5 (buy at 1, sell at 6)",
+   "function": "max_profit", "params": "prices",
+   "hint": "Walk through the prices once. Track the lowest price so far and the best profit if you sold today.",
+   "complexity": {"time": "O(n)", "space": "O(1)"},
+   "tests": [
+     {"args": [[7, 1, 5, 3, 6, 4]], "expected": 5},
+     {"args": [[7, 6, 4, 3, 1]], "expected": 0},
+     {"args": [[]], "expected": 0},
+     {"args": [[2, 4, 1]], "expected": 2}
+   ],
+   "solution": [
+     "def max_profit(prices):",
+     "    best = 0",
+     "    lowest = float('inf')",
+     "    for p in prices:",
+     "        lowest = min(lowest, p)",
+     "        best = max(best, p - lowest)",
+     "    return best"
+   ]},
+  {"id": "py-lists-c3", "language": "python", "concept": "lists", "kind": "coding", "difficulty": "medium",
+   "prompt": "Write rotate_list(nums, k). Return a NEW list rotated to the right by k steps. k can be bigger than the list length.\nExample: [1, 2, 3, 4, 5], k=2 -> [4, 5, 1, 2, 3]",
+   "function": "rotate_list", "params": "nums, k",
+   "hint": "k % len(nums) removes full laps. Then glue the last k items in front of the rest using slices.",
+   "complexity": {"time": "O(n)", "space": "O(n)"},
+   "tests": [
+     {"args": [[1, 2, 3, 4, 5], 2], "expected": [4, 5, 1, 2, 3]},
+     {"args": [[1], 3], "expected": [1]},
+     {"args": [[], 2], "expected": []},
+     {"args": [[1, 2, 3], 0], "expected": [1, 2, 3]},
+     {"args": [[1, 2, 3], 4], "expected": [3, 1, 2]}
+   ],
+   "solution": [
+     "def rotate_list(nums, k):",
+     "    if not nums:",
+     "        return []",
+     "    k %= len(nums)",
+     "    return nums[-k:] + nums[:-k] if k else nums[:]"
+   ]},
+
+  {"id": "py-dictionaries-q1", "language": "python", "concept": "dictionaries", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `{'a': 1}.get('b', 0)` return?", "answer": "0",
+   "explanation": ".get returns the second argument when the key is missing, instead of raising KeyError."},
+  {"id": "py-dictionaries-q2", "language": "python", "concept": "dictionaries", "kind": "quick", "difficulty": "easy",
+   "prompt": "After `d = {'a': 1}` and `d['b'] = 2`, what is `len(d)`?", "answer": "2",
+   "explanation": "Assigning to a new key adds it, so the dictionary now holds two pairs."},
+  {"id": "py-dictionaries-c1", "language": "python", "concept": "dictionaries", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write count_chars(text). Return a dictionary that maps each character to how many times it appears.\nExample: 'aab' -> {'a': 2, 'b': 1}",
+   "function": "count_chars", "params": "text",
+   "hint": "counts[ch] = counts.get(ch, 0) + 1 for every character.",
+   "complexity": {"time": "O(n)", "space": "O(k) for k distinct characters"},
+   "tests": [
+     {"args": ["aab"], "expected": {"a": 2, "b": 1}},
+     {"args": [""], "expected": {}},
+     {"args": ["hello"], "expected": {"h": 1, "e": 1, "l": 2, "o": 1}}
+   ],
+   "solution": [
+     "def count_chars(text):",
+     "    counts = {}",
+     "    for ch in text:",
+     "        counts[ch] = counts.get(ch, 0) + 1",
+     "    return counts"
+   ]},
+  {"id": "py-dictionaries-c2", "language": "python", "concept": "dictionaries", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write two_sum(nums, target). Return the indexes [i, j] (i < j) of the two numbers that add up to target. Exactly one answer exists.\nExample: [2, 7, 11, 15], target 9 -> [0, 1]\n(This is LeetCode #1. It is asked constantly.)",
+   "function": "two_sum", "params": "nums, target",
+   "hint": "For each number, the partner you need is target - number. Store numbers you've seen in a dict {value: index} so the partner lookup is instant.",
+   "complexity": {"time": "O(n)", "space": "O(n)"},
+   "tests": [
+     {"args": [[2, 7, 11, 15], 9], "expected": [0, 1]},
+     {"args": [[3, 2, 4], 6], "expected": [1, 2]},
+     {"args": [[3, 3], 6], "expected": [0, 1]}
+   ],
+   "solution": [
+     "def two_sum(nums, target):",
+     "    seen = {}",
+     "    for i, n in enumerate(nums):",
+     "        if target - n in seen:",
+     "            return [seen[target - n], i]",
+     "        seen[n] = i",
+     "    return []"
+   ]},
+  {"id": "py-dictionaries-c3", "language": "python", "concept": "dictionaries", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write first_unique_char(s). Return the index of the first character that appears only once in s, or -1 if there isn't one.\nExample: 'loveleetcode' -> 2",
+   "function": "first_unique_char", "params": "s",
+   "hint": "Count every character first (one pass), then find the first character whose count is 1 (second pass).",
+   "complexity": {"time": "O(n)", "space": "O(1) for a fixed alphabet"},
+   "tests": [
+     {"args": ["leetcode"], "expected": 0},
+     {"args": ["loveleetcode"], "expected": 2},
+     {"args": ["aabb"], "expected": -1},
+     {"args": [""], "expected": -1}
+   ],
+   "solution": [
+     "def first_unique_char(s):",
+     "    counts = {}",
+     "    for ch in s:",
+     "        counts[ch] = counts.get(ch, 0) + 1",
+     "    for i, ch in enumerate(s):",
+     "        if counts[ch] == 1:",
+     "            return i",
+     "    return -1"
+   ]},
+  {"id": "py-dictionaries-c4", "language": "python", "concept": "dictionaries", "kind": "coding", "difficulty": "medium",
+   "prompt": "Write group_anagrams(words). Group words that are anagrams of each other. Return a list of groups; the order of groups and of words inside a group doesn't matter.\nExample: ['eat','tea','tan','ate','nat','bat'] -> [['eat','tea','ate'], ['tan','nat'], ['bat']]",
+   "function": "group_anagrams", "params": "words", "unordered": true,
+   "hint": "Anagrams become identical when their letters are sorted. Use the sorted letters as the dictionary key.",
+   "complexity": {"time": "O(n * k log k) for n words of length k", "space": "O(n * k)"},
+   "tests": [
+     {"args": [["eat", "tea", "tan", "ate", "nat", "bat"]], "expected": [["eat", "tea", "ate"], ["tan", "nat"], ["bat"]]},
+     {"args": [[""]], "expected": [[""]]},
+     {"args": [["a"]], "expected": [["a"]]}
+   ],
+   "solution": [
+     "def group_anagrams(words):",
+     "    groups = {}",
+     "    for word in words:",
+     "        groups.setdefault(''.join(sorted(word)), []).append(word)",
+     "    return list(groups.values())"
+   ]},
+
+  {"id": "py-strings-q1", "language": "python", "concept": "strings", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `'Hello'[1:4]` return?", "answer": "ell",
+   "explanation": "Positions 1, 2 and 3 are 'e', 'l', 'l'. The end index (4) is not included."},
+  {"id": "py-strings-q2", "language": "python", "concept": "strings", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `'a,b,c'.split(',')` return?", "answer": ["['a','b','c']", "[a,b,c]"],
+   "explanation": "split cuts the string at each comma and gives back a list of the pieces."},
+  {"id": "py-strings-c1", "language": "python", "concept": "strings", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write is_palindrome(s). Return True if s reads the same forwards and backwards. Ignore case, spaces and punctuation.\nExample: 'A man, a plan, a canal: Panama' -> True",
+   "function": "is_palindrome", "params": "s",
+   "hint": "Keep only letters and digits (str.isalnum), lowercase them, then compare the list with its reverse.",
+   "complexity": {"time": "O(n)", "space": "O(n)"},
+   "tests": [
+     {"args": ["A man, a plan, a canal: Panama"], "expected": true},
+     {"args": ["race a car"], "expected": false},
+     {"args": [""], "expected": true}
+   ],
+   "solution": [
+     "def is_palindrome(s):",
+     "    cleaned = [c.lower() for c in s if c.isalnum()]",
+     "    return cleaned == cleaned[::-1]"
+   ]},
+  {"id": "py-strings-c2", "language": "python", "concept": "strings", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write reverse_words(s). Return the words of s in reverse order, separated by a single space. Ignore extra spaces at the start, end and between words.\nExample: '  hello   world  ' -> 'world hello'",
+   "function": "reverse_words", "params": "s",
+   "hint": "s.split() with no argument already splits on any run of spaces and drops the empty pieces.",
+   "complexity": {"time": "O(n)", "space": "O(n)"},
+   "tests": [
+     {"args": ["the sky is blue"], "expected": "blue is sky the"},
+     {"args": ["  hello   world  "], "expected": "world hello"},
+     {"args": ["a"], "expected": "a"},
+     {"args": [""], "expected": ""}
+   ],
+   "solution": [
+     "def reverse_words(s):",
+     "    return ' '.join(s.split()[::-1])"
+   ]},
+  {"id": "py-strings-c3", "language": "python", "concept": "strings", "kind": "coding", "difficulty": "medium",
+   "prompt": "Write longest_common_prefix(words). Return the longest starting text shared by every word, or '' if there is none.\nExample: ['flower', 'flow', 'flight'] -> 'fl'",
+   "function": "longest_common_prefix", "params": "words",
+   "hint": "Start with the first word as the prefix. For each other word, chop one letter off the prefix until the word starts with it.",
+   "complexity": {"time": "O(total characters)", "space": "O(1)"},
+   "tests": [
+     {"args": [["flower", "flow", "flight"]], "expected": "fl"},
+     {"args": [["dog", "racecar", "car"]], "expected": ""},
+     {"args": [["a"]], "expected": "a"},
+     {"args": [[]], "expected": ""}
+   ],
+   "solution": [
+     "def longest_common_prefix(words):",
+     "    if not words:",
+     "        return ''",
+     "    prefix = words[0]",
+     "    for word in words[1:]:",
+     "        while not word.startswith(prefix):",
+     "            prefix = prefix[:-1]",
+     "    return prefix"
+   ]},
+  {"id": "py-strings-c4", "language": "python", "concept": "strings", "kind": "coding", "difficulty": "medium",
+   "prompt": "Write compress(s). Run-length encode the string: each run of the same character becomes the character followed by the run length.\nExample: 'aaabbc' -> 'a3b2c1'",
+   "function": "compress", "params": "s",
+   "hint": "Walk the string keeping a running count. When the character changes (or the string ends), write the previous character and its count.",
+   "complexity": {"time": "O(n)", "space": "O(n)"},
+   "tests": [
+     {"args": ["aaabbc"], "expected": "a3b2c1"},
+     {"args": [""], "expected": ""},
+     {"args": ["z"], "expected": "z1"},
+     {"args": ["aabbaa"], "expected": "a2b2a2"}
+   ],
+   "solution": [
+     "def compress(s):",
+     "    if not s:",
+     "        return ''",
+     "    out = []",
+     "    count = 1",
+     "    for i in range(1, len(s) + 1):",
+     "        if i < len(s) and s[i] == s[i - 1]:",
+     "            count += 1",
+     "        else:",
+     "            out.append(s[i - 1] + str(count))",
+     "            count = 1",
+     "    return ''.join(out)"
+   ]},
+
+  {"id": "py-sets-q1", "language": "python", "concept": "sets", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `len({1, 2, 2, 3})` return?", "answer": "3",
+   "explanation": "A set keeps each value once, so the duplicate 2 disappears."},
+  {"id": "py-sets-q2", "language": "python", "concept": "sets", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `{1, 2, 3} & {2, 3, 4}` return?", "answer": ["{2, 3}", "{3, 2}"],
+   "explanation": "& is intersection: only the values that are in both sets."},
+  {"id": "py-sets-c1", "language": "python", "concept": "sets", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write has_duplicate(nums). Return True if any value appears at least twice.\nExample: [1, 2, 3, 1] -> True",
+   "function": "has_duplicate", "params": "nums",
+   "hint": "A set has no duplicates. Compare its length with the list's length, or stop as soon as you see a value twice.",
+   "complexity": {"time": "O(n)", "space": "O(n)"},
+   "tests": [
+     {"args": [[1, 2, 3, 1]], "expected": true},
+     {"args": [[1, 2, 3]], "expected": false},
+     {"args": [[]], "expected": false}
+   ],
+   "solution": [
+     "def has_duplicate(nums):",
+     "    return len(set(nums)) != len(nums)"
+   ]},
+  {"id": "py-sets-c2", "language": "python", "concept": "sets", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write common_elements(a, b). Return a sorted list of the distinct values that appear in both lists.\nExample: [1, 2, 2, 3], [2, 2, 3, 4] -> [2, 3]",
+   "function": "common_elements", "params": "a, b",
+   "hint": "Turn both lists into sets and use & (intersection), then sort the result.",
+   "complexity": {"time": "O(n + m)", "space": "O(n + m)"},
+   "tests": [
+     {"args": [[1, 2, 2, 3], [2, 2, 3, 4]], "expected": [2, 3]},
+     {"args": [[1], [2]], "expected": []},
+     {"args": [[], [1]], "expected": []}
+   ],
+   "solution": [
+     "def common_elements(a, b):",
+     "    return sorted(set(a) & set(b))"
+   ]},
+  {"id": "py-sets-c3", "language": "python", "concept": "sets", "kind": "coding", "difficulty": "medium",
+   "prompt": "Write longest_consecutive(nums). Return the length of the longest run of consecutive integers (like 3, 4, 5, 6) that can be formed from the values. The list is unsorted. Aim for O(n) time.\nExample: [100, 4, 200, 1, 3, 2] -> 4 (1, 2, 3, 4)",
+   "function": "longest_consecutive", "params": "nums",
+   "hint": "Put everything in a set. Only start counting from a number whose predecessor (n - 1) is NOT in the set, then count upward.",
+   "complexity": {"time": "O(n)", "space": "O(n)"},
+   "tests": [
+     {"args": [[100, 4, 200, 1, 3, 2]], "expected": 4},
+     {"args": [[0, 3, 7, 2, 5, 8, 4, 6, 0, 1]], "expected": 9},
+     {"args": [[]], "expected": 0},
+     {"args": [[5]], "expected": 1}
+   ],
+   "solution": [
+     "def longest_consecutive(nums):",
+     "    values = set(nums)",
+     "    best = 0",
+     "    for n in values:",
+     "        if n - 1 not in values:",
+     "            length = 1",
+     "            while n + length in values:",
+     "                length += 1",
+     "            best = max(best, length)",
+     "    return best"
+   ]},
+
+  {"id": "py-loops-comprehensions-q1", "language": "python", "concept": "loops-comprehensions", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `[x * 2 for x in range(3)]` return?", "answer": "[0, 2, 4]",
+   "explanation": "range(3) gives 0, 1, 2. Each one is doubled."},
+  {"id": "py-loops-comprehensions-q2", "language": "python", "concept": "loops-comprehensions", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `[x for x in range(10) if x % 3 == 0]` return?", "answer": "[0, 3, 6, 9]",
+   "explanation": "The `if` at the end filters: only multiples of 3 are kept."},
+  {"id": "py-loops-comprehensions-c1", "language": "python", "concept": "loops-comprehensions", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write squares_of_evens(nums). Return a list of the squares of the even numbers, in the original order.\nExample: [1, 2, 3, 4] -> [4, 16]",
+   "function": "squares_of_evens", "params": "nums",
+   "hint": "One list comprehension: [x * x for x in nums if x % 2 == 0]",
+   "complexity": {"time": "O(n)", "space": "O(n)"},
+   "tests": [
+     {"args": [[1, 2, 3, 4]], "expected": [4, 16]},
+     {"args": [[]], "expected": []},
+     {"args": [[1, 3]], "expected": []}
+   ],
+   "solution": [
+     "def squares_of_evens(nums):",
+     "    return [x * x for x in nums if x % 2 == 0]"
+   ]},
+  {"id": "py-loops-comprehensions-c2", "language": "python", "concept": "loops-comprehensions", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write fizzbuzz(n). Return a list of strings for 1..n: 'FizzBuzz' if the number divides by 3 and 5, 'Fizz' if by 3, 'Buzz' if by 5, otherwise the number as a string.\nExample: 5 -> ['1', '2', 'Fizz', '4', 'Buzz']",
+   "function": "fizzbuzz", "params": "n",
+   "hint": "Check divisibility by 15 (or both 3 and 5) FIRST, otherwise 'Fizz' would win.",
+   "complexity": {"time": "O(n)", "space": "O(n)"},
+   "tests": [
+     {"args": [5], "expected": ["1", "2", "Fizz", "4", "Buzz"]},
+     {"args": [15], "expected": ["1", "2", "Fizz", "4", "Buzz", "Fizz", "7", "8", "Fizz", "Buzz", "11", "Fizz", "13", "14", "FizzBuzz"]},
+     {"args": [0], "expected": []}
+   ],
+   "solution": [
+     "def fizzbuzz(n):",
+     "    out = []",
+     "    for i in range(1, n + 1):",
+     "        if i % 15 == 0:",
+     "            out.append('FizzBuzz')",
+     "        elif i % 3 == 0:",
+     "            out.append('Fizz')",
+     "        elif i % 5 == 0:",
+     "            out.append('Buzz')",
+     "        else:",
+     "            out.append(str(i))",
+     "    return out"
+   ]},
+  {"id": "py-loops-comprehensions-c3", "language": "python", "concept": "loops-comprehensions", "kind": "coding", "difficulty": "medium",
+   "prompt": "Write flatten(matrix). Turn a list of lists into one flat list, row by row.\nExample: [[1, 2], [3], [4, 5, 6]] -> [1, 2, 3, 4, 5, 6]",
+   "function": "flatten", "params": "matrix",
+   "hint": "A comprehension can have two for-clauses: [x for row in matrix for x in row]",
+   "complexity": {"time": "O(total items)", "space": "O(total items)"},
+   "tests": [
+     {"args": [[[1, 2], [3], [4, 5, 6]]], "expected": [1, 2, 3, 4, 5, 6]},
+     {"args": [[]], "expected": []},
+     {"args": [[[], [1]]], "expected": [1]}
+   ],
+   "solution": [
+     "def flatten(matrix):",
+     "    return [x for row in matrix for x in row]"
+   ]},
+  {"id": "py-loops-comprehensions-c4", "language": "python", "concept": "loops-comprehensions", "kind": "coding", "difficulty": "medium",
+   "prompt": "Write transpose(matrix). Swap the rows and columns of a rectangular matrix.\nExample: [[1, 2, 3], [4, 5, 6]] -> [[1, 4], [2, 5], [3, 6]]",
+   "function": "transpose", "params": "matrix",
+   "hint": "zip(*matrix) pairs up the first items of every row, then the second items, and so on.",
+   "complexity": {"time": "O(rows * cols)", "space": "O(rows * cols)"},
+   "tests": [
+     {"args": [[[1, 2, 3], [4, 5, 6]]], "expected": [[1, 4], [2, 5], [3, 6]]},
+     {"args": [[[1]]], "expected": [[1]]},
+     {"args": [[]], "expected": []}
+   ],
+   "solution": [
+     "def transpose(matrix):",
+     "    return [list(row) for row in zip(*matrix)]"
+   ]},
+
+  {"id": "py-functions-q1", "language": "python", "concept": "functions", "kind": "quick", "difficulty": "easy",
+   "prompt": "A function has no `return` statement. What does calling it give back?",
+   "options": ["0", "None", "An error", "An empty string"], "answer": "b",
+   "explanation": "Python functions return None when they finish without a return."},
+  {"id": "py-functions-q2", "language": "python", "concept": "functions", "kind": "quick", "difficulty": "easy",
+   "prompt": "Given `def f(a, b=2): return a + b`, what does `f(1)` return?", "answer": "3",
+   "explanation": "b falls back to its default value 2 when you don't pass it."},
+  {"id": "py-functions-q3", "language": "python", "concept": "functions", "kind": "quick", "difficulty": "medium",
+   "prompt": "Given `def add(item, items=[]): items.append(item); return items`, what do you get after calling `add(1)` and then `add(2)`? (the second call's result)",
+   "answer": "[1, 2]",
+   "explanation": "The default list is created ONCE, when the function is defined, and shared by every call. This is the classic mutable default argument trap. Use items=None and create the list inside instead."},
+  {"id": "py-functions-c1", "language": "python", "concept": "functions", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write make_greeting(name, greeting='Hello'). Return the text '<greeting>, <name>!'.\nExample: make_greeting('Sam') -> 'Hello, Sam!'",
+   "function": "make_greeting", "params": "name, greeting='Hello'",
+   "hint": "Give the second parameter a default value in the def line, then build the string with an f-string.",
+   "tests": [
+     {"args": ["Sam"], "expected": "Hello, Sam!"},
+     {"args": ["Sam", "Hi"], "expected": "Hi, Sam!"}
+   ],
+   "solution": [
+     "def make_greeting(name, greeting='Hello'):",
+     "    return f'{greeting}, {name}!'"
+   ]},
+  {"id": "py-functions-c2", "language": "python", "concept": "functions", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write sum_all(*nums) that accepts ANY number of arguments and returns their sum (0 if none).\nExample: sum_all(1, 2, 3) -> 6",
+   "function": "sum_all", "params": "*nums",
+   "hint": "A parameter written *nums collects all the extra arguments into a tuple.",
+   "tests": [
+     {"args": [1, 2, 3], "expected": 6},
+     {"args": [], "expected": 0},
+     {"args": [5], "expected": 5}
+   ],
+   "solution": [
+     "def sum_all(*nums):",
+     "    return sum(nums)"
+   ]},
+  {"id": "py-functions-c3", "language": "python", "concept": "functions", "kind": "coding", "difficulty": "medium",
+   "prompt": "Write calculate(op, a, b). op is one of '+', '-', '*', '/'. Return the result. Return None for an unknown operator, and None when dividing by zero.\nExample: calculate('/', 6, 3) -> 2.0",
+   "function": "calculate", "params": "op, a, b",
+   "hint": "A dictionary that maps each operator to a small function (lambda) replaces a long if/elif chain.",
+   "tests": [
+     {"args": ["+", 2, 3], "expected": 5},
+     {"args": ["-", 3, 5], "expected": -2},
+     {"args": ["/", 6, 3], "expected": 2.0},
+     {"args": ["/", 1, 0], "expected": null},
+     {"args": ["^", 1, 1], "expected": null}
+   ],
+   "solution": [
+     "def calculate(op, a, b):",
+     "    operations = {",
+     "        '+': lambda x, y: x + y,",
+     "        '-': lambda x, y: x - y,",
+     "        '*': lambda x, y: x * y,",
+     "        '/': lambda x, y: x / y if y != 0 else None,",
+     "    }",
+     "    if op not in operations:",
+     "        return None",
+     "    return operations[op](a, b)"
+   ]},
+
+  {"id": "py-exceptions-q1", "language": "python", "concept": "exceptions", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `int('abc')` do?",
+   "options": ["Returns 0", "Raises ValueError", "Raises TypeError", "Returns None"], "answer": "b",
+   "explanation": "The text isn't a valid number, so int() raises ValueError."},
+  {"id": "py-exceptions-q2", "language": "python", "concept": "exceptions", "kind": "quick", "difficulty": "easy",
+   "prompt": "Does a `finally` block run when an exception was raised and caught by an `except` block?",
+   "options": ["Yes, always", "No, never", "Only if there is no except block"], "answer": "a",
+   "explanation": "finally runs no matter what: success, caught error or uncaught error. It's where cleanup (closing files) belongs."},
+  {"id": "py-exceptions-c1", "language": "python", "concept": "exceptions", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write safe_divide(a, b). Return a / b, or None if b is zero. Use try/except.\nExample: safe_divide(6, 3) -> 2.0",
+   "function": "safe_divide", "params": "a, b",
+   "hint": "Wrap a / b in try, and catch ZeroDivisionError.",
+   "tests": [
+     {"args": [6, 3], "expected": 2.0},
+     {"args": [1, 0], "expected": null},
+     {"args": [0, 5], "expected": 0.0}
+   ],
+   "solution": [
+     "def safe_divide(a, b):",
+     "    try:",
+     "        return a / b",
+     "    except ZeroDivisionError:",
+     "        return None"
+   ]},
+  {"id": "py-exceptions-c2", "language": "python", "concept": "exceptions", "kind": "coding", "difficulty": "medium",
+   "prompt": "Write parse_int(text, default). Return int(text) if it is a valid whole number, otherwise return default. Surrounding spaces are fine.\nExample: parse_int(' 7 ', 0) -> 7, parse_int('abc', -1) -> -1",
+   "function": "parse_int", "params": "text, default",
+   "hint": "int() raises ValueError for bad text. Catch only ValueError, not every error.",
+   "tests": [
+     {"args": ["42", 0], "expected": 42},
+     {"args": ["abc", -1], "expected": -1},
+     {"args": ["", 5], "expected": 5},
+     {"args": [" 7 ", 0], "expected": 7},
+     {"args": ["3.5", 9], "expected": 9}
+   ],
+   "solution": [
+     "def parse_int(text, default):",
+     "    try:",
+     "        return int(text)",
+     "    except ValueError:",
+     "        return default"
+   ]},
+
+  {"id": "py-classes-q1", "language": "python", "concept": "classes", "kind": "quick", "difficulty": "easy",
+   "prompt": "In a method like `def deposit(self, amount):`, what is `self`?",
+   "options": ["The class itself", "The specific object the method was called on", "A reserved global variable", "The return value"], "answer": "b",
+   "explanation": "self is the object. account.deposit(5) passes account in as self automatically."},
+  {"id": "py-classes-q2", "language": "python", "concept": "classes", "kind": "quick", "difficulty": "easy",
+   "prompt": "Given `class A:` with `def __init__(self): self.x = 1`, what does `A().x` return?", "answer": "1",
+   "explanation": "__init__ runs when the object is created and sets x to 1 on that object."},
+  {"id": "py-classes-c1", "language": "python", "concept": "classes", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write a class Counter with methods increment(), decrement() and value(). It starts at 0.\nExample: after increment() twice, value() -> 2",
+   "class": "Counter",
+   "starter": "class Counter:\n    def __init__(self):\n        pass\n",
+   "hint": "Store the number on self in __init__ (self.count = 0), then change it in the other methods.",
+   "tests": [
+     {"init": [], "ops": [["increment"], ["increment"], ["value"]], "expected": [null, null, 2]},
+     {"init": [], "ops": [["value"], ["decrement"], ["value"]], "expected": [0, null, -1]}
+   ],
+   "solution": [
+     "class Counter:",
+     "    def __init__(self):",
+     "        self.count = 0",
+     "    def increment(self):",
+     "        self.count += 1",
+     "    def decrement(self):",
+     "        self.count -= 1",
+     "    def value(self):",
+     "        return self.count"
+   ]},
+  {"id": "py-classes-c2", "language": "python", "concept": "classes", "kind": "coding", "difficulty": "medium",
+   "prompt": "Write a class BankAccount(balance=0) with deposit(amount) (returns nothing), withdraw(amount) (returns True and subtracts if there is enough money, otherwise returns False and changes nothing) and balance() (returns the current balance).",
+   "class": "BankAccount",
+   "starter": "class BankAccount:\n    def __init__(self, balance=0):\n        pass\n",
+   "hint": "withdraw must check the balance BEFORE subtracting.",
+   "tests": [
+     {"init": [100], "ops": [["withdraw", 30], ["withdraw", 100], ["deposit", 50], ["balance"]], "expected": [true, false, null, 120]},
+     {"init": [], "ops": [["balance"], ["deposit", 5], ["balance"]], "expected": [0, null, 5]}
+   ],
+   "solution": [
+     "class BankAccount:",
+     "    def __init__(self, balance=0):",
+     "        self._balance = balance",
+     "    def deposit(self, amount):",
+     "        self._balance += amount",
+     "    def withdraw(self, amount):",
+     "        if amount > self._balance:",
+     "            return False",
+     "        self._balance -= amount",
+     "        return True",
+     "    def balance(self):",
+     "        return self._balance"
+   ]},
+  {"id": "py-classes-c3", "language": "python", "concept": "classes", "kind": "coding", "difficulty": "hard",
+   "prompt": "Design an LRUCache(capacity). get(key) returns the value or -1 if missing, and marks the key as recently used. put(key, value) stores it (returns nothing); if the cache is over capacity, evict the LEAST recently used key. Both operations should be O(1).\n(A very common interview design question.)",
+   "class": "LRUCache",
+   "starter": "class LRUCache:\n    def __init__(self, capacity):\n        pass\n",
+   "hint": "collections.OrderedDict remembers insertion order and has move_to_end() and popitem(last=False).",
+   "complexity": {"time": "O(1) per operation", "space": "O(capacity)"},
+   "tests": [
+     {"init": [2], "ops": [["put", 1, 1], ["put", 2, 2], ["get", 1], ["put", 3, 3], ["get", 2], ["put", 4, 4], ["get", 1], ["get", 3], ["get", 4]],
+      "expected": [null, null, 1, null, -1, null, -1, 3, 4]}
+   ],
+   "solution": [
+     "from collections import OrderedDict",
+     "",
+     "class LRUCache:",
+     "    def __init__(self, capacity):",
+     "        self.capacity = capacity",
+     "        self.items = OrderedDict()",
+     "    def get(self, key):",
+     "        if key not in self.items:",
+     "            return -1",
+     "        self.items.move_to_end(key)",
+     "        return self.items[key]",
+     "    def put(self, key, value):",
+     "        if key in self.items:",
+     "            self.items.move_to_end(key)",
+     "        self.items[key] = value",
+     "        if len(self.items) > self.capacity:",
+     "            self.items.popitem(last=False)"
+   ]},
+
+  {"id": "py-big-o-q1", "language": "python", "concept": "big-o", "kind": "quick", "difficulty": "easy",
+   "prompt": "What is the average time to look up a key in a Python dict?",
+   "options": ["O(1)", "O(log n)", "O(n)", "O(n log n)"], "answer": "a",
+   "explanation": "Dicts use hashing, so lookup time doesn't grow with the size of the dict."},
+  {"id": "py-big-o-q2", "language": "python", "concept": "big-o", "kind": "quick", "difficulty": "easy",
+   "prompt": "Two nested loops, each running n times over the same list. What is the time complexity?",
+   "options": ["O(n)", "O(n log n)", "O(n^2)", "O(2^n)"], "answer": "c",
+   "explanation": "n times n = n squared steps. Nested loops over the input are the classic O(n^2)."},
+  {"id": "py-big-o-q3", "language": "python", "concept": "big-o", "kind": "quick", "difficulty": "easy",
+   "prompt": "What is the time complexity of binary search on a sorted list?",
+   "options": ["O(1)", "O(log n)", "O(n)", "O(n^2)"], "answer": "b",
+   "explanation": "Each step halves the remaining range, so you need about log2(n) steps."},
+  {"id": "py-big-o-q4", "language": "python", "concept": "big-o", "kind": "quick", "difficulty": "medium",
+   "prompt": "`x in my_list` (a list) versus `x in my_set` (a set). Which is true?",
+   "options": ["Both are O(1)", "list is O(n), set is O(1) on average", "list is O(1), set is O(n)", "Both are O(n)"], "answer": "b",
+   "explanation": "A list must scan item by item. A set hashes the value and jumps straight to it. This swap is the most common speedup in interview answers."},
+  {"id": "py-big-o-c1", "language": "python", "concept": "big-o", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write is_anagram(a, b). Return True if b is a rearrangement of the letters of a. Do it in O(n) time (no sorting).\nExample: 'listen', 'silent' -> True",
+   "function": "is_anagram", "params": "a, b",
+   "hint": "Count the letters of a, then subtract the letters of b. Any count that goes below zero means b is not an anagram.",
+   "complexity": {"time": "O(n)", "space": "O(1) for a fixed alphabet"},
+   "tests": [
+     {"args": ["listen", "silent"], "expected": true},
+     {"args": ["rat", "car"], "expected": false},
+     {"args": ["", ""], "expected": true},
+     {"args": ["aab", "abb"], "expected": false}
+   ],
+   "solution": [
+     "def is_anagram(a, b):",
+     "    if len(a) != len(b):",
+     "        return False",
+     "    counts = {}",
+     "    for ch in a:",
+     "        counts[ch] = counts.get(ch, 0) + 1",
+     "    for ch in b:",
+     "        if counts.get(ch, 0) == 0:",
+     "            return False",
+     "        counts[ch] -= 1",
+     "    return True"
+   ]}
+]

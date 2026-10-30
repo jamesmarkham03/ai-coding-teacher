@@ -1,0 +1,220 @@
+[
+  {"id": "js-arrays-q1", "language": "javascript", "concept": "arrays", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `[1, 2, 3].map(x => x * 2)` return?", "answer": "[2, 4, 6]",
+   "explanation": "map builds a NEW array by running the function on every item. The original array is unchanged."},
+  {"id": "js-arrays-q2", "language": "javascript", "concept": "arrays", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `[1, 2, 3].push(4)` return?", "answer": "4",
+   "explanation": "push changes the array in place and returns the NEW LENGTH, not the array."},
+  {"id": "js-arrays-c1", "language": "javascript", "concept": "arrays", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write sumEvens(nums). Return the sum of the even numbers.\nExample: [1, 2, 3, 4] -> 6",
+   "function": "sumEvens", "params": "nums",
+   "hint": "nums.filter(n => n % 2 === 0).reduce((a, b) => a + b, 0)",
+   "tests": [
+     {"args": [[1, 2, 3, 4]], "expected": 6},
+     {"args": [[]], "expected": 0},
+     {"args": [[1, 3]], "expected": 0}
+   ],
+   "solution": [
+     "function sumEvens(nums) {",
+     "  return nums.filter((n) => n % 2 === 0).reduce((a, b) => a + b, 0);",
+     "}"
+   ]},
+  {"id": "js-arrays-c2", "language": "javascript", "concept": "arrays", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write uniqueValues(nums). Return the distinct values, keeping the order of first appearance.\nExample: [1, 2, 1, 3, 2] -> [1, 2, 3]",
+   "function": "uniqueValues", "params": "nums",
+   "hint": "A Set removes duplicates and keeps insertion order. Spread it back into an array: [...new Set(nums)]",
+   "tests": [
+     {"args": [[1, 2, 1, 3, 2]], "expected": [1, 2, 3]},
+     {"args": [[]], "expected": []},
+     {"args": [[5, 5]], "expected": [5]}
+   ],
+   "solution": [
+     "function uniqueValues(nums) {",
+     "  return [...new Set(nums)];",
+     "}"
+   ]},
+  {"id": "js-arrays-c3", "language": "javascript", "concept": "arrays", "kind": "coding", "difficulty": "medium",
+   "prompt": "Write chunk(arr, size). Split the array into groups of `size`; the last group may be shorter.\nExample: [1, 2, 3, 4, 5], 2 -> [[1, 2], [3, 4], [5]]",
+   "function": "chunk", "params": "arr, size",
+   "hint": "Step through the array in jumps of `size` and use arr.slice(i, i + size).",
+   "tests": [
+     {"args": [[1, 2, 3, 4, 5], 2], "expected": [[1, 2], [3, 4], [5]]},
+     {"args": [[], 3], "expected": []},
+     {"args": [[1, 2, 3], 5], "expected": [[1, 2, 3]]}
+   ],
+   "solution": [
+     "function chunk(arr, size) {",
+     "  const out = [];",
+     "  for (let i = 0; i < arr.length; i += size) {",
+     "    out.push(arr.slice(i, i + size));",
+     "  }",
+     "  return out;",
+     "}"
+   ]},
+
+  {"id": "js-objects-q1", "language": "javascript", "concept": "objects", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `typeof null` return?", "answer": "object",
+   "explanation": "A famous historic bug in JavaScript that can never be fixed. Check for null with `value === null`."},
+  {"id": "js-objects-q2", "language": "javascript", "concept": "objects", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `({ a: 1 }).b` return?", "answer": "undefined",
+   "explanation": "Reading a missing property gives undefined (no error). Reading a property of undefined itself would throw."},
+  {"id": "js-objects-c1", "language": "javascript", "concept": "objects", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write countWords(text). Return an object that maps each lowercase word to how many times it appears. Words are separated by spaces.\nExample: 'a b a' -> { a: 2, b: 1 }",
+   "function": "countWords", "params": "text",
+   "hint": "counts[word] = (counts[word] || 0) + 1. Remember an empty string should give {}.",
+   "tests": [
+     {"args": ["a b a"], "expected": {"a": 2, "b": 1}},
+     {"args": [""], "expected": {}},
+     {"args": ["The the THE"], "expected": {"the": 3}}
+   ],
+   "solution": [
+     "function countWords(text) {",
+     "  const counts = {};",
+     "  for (const word of text.toLowerCase().split(' ')) {",
+     "    if (word === '') continue;",
+     "    counts[word] = (counts[word] || 0) + 1;",
+     "  }",
+     "  return counts;",
+     "}"
+   ]},
+  {"id": "js-objects-c2", "language": "javascript", "concept": "objects", "kind": "coding", "difficulty": "medium",
+   "prompt": "Write groupBy(items, key). items is an array of objects. Return an object that groups the items by the value of the given key.\nExample: [{t:'A',n:1},{t:'B',n:2},{t:'A',n:3}], 't' -> { A: [{t:'A',n:1},{t:'A',n:3}], B: [{t:'B',n:2}] }",
+   "function": "groupBy", "params": "items, key",
+   "hint": "For each item: create the array for item[key] if it doesn't exist yet, then push the item.",
+   "tests": [
+     {"args": [[{"t": "A", "n": 1}, {"t": "B", "n": 2}, {"t": "A", "n": 3}], "t"], "expected": {"A": [{"t": "A", "n": 1}, {"t": "A", "n": 3}], "B": [{"t": "B", "n": 2}]}},
+     {"args": [[], "t"], "expected": {}}
+   ],
+   "solution": [
+     "function groupBy(items, key) {",
+     "  const groups = {};",
+     "  for (const item of items) {",
+     "    (groups[item[key]] ||= []).push(item);",
+     "  }",
+     "  return groups;",
+     "}"
+   ]},
+  {"id": "js-objects-c3", "language": "javascript", "concept": "objects", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write twoSum(nums, target). Return the indexes [i, j] (i < j) of the two numbers that add to target. Exactly one answer exists.\nExample: [2, 7, 11, 15], 9 -> [0, 1]",
+   "function": "twoSum", "params": "nums, target",
+   "hint": "Use a Map from value to index so each partner lookup is instant.",
+   "tests": [
+     {"args": [[2, 7, 11, 15], 9], "expected": [0, 1]},
+     {"args": [[3, 2, 4], 6], "expected": [1, 2]},
+     {"args": [[3, 3], 6], "expected": [0, 1]}
+   ],
+   "solution": [
+     "function twoSum(nums, target) {",
+     "  const seen = new Map();",
+     "  for (let i = 0; i < nums.length; i++) {",
+     "    if (seen.has(target - nums[i])) return [seen.get(target - nums[i]), i];",
+     "    seen.set(nums[i], i);",
+     "  }",
+     "  return [];",
+     "}"
+   ]},
+
+  {"id": "js-strings-q1", "language": "javascript", "concept": "strings", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `'hello'.slice(1, 3)` return?", "answer": "el",
+   "explanation": "Like Python slices: starts at index 1, stops before index 3."},
+  {"id": "js-strings-q2", "language": "javascript", "concept": "strings", "kind": "quick", "difficulty": "easy",
+   "prompt": "What does `'5' + 3` return?", "answer": "53",
+   "explanation": "If either side is a string, + joins text. JavaScript turns the 3 into '3'. (`'5' - 3` would be the number 2.)"},
+  {"id": "js-strings-c1", "language": "javascript", "concept": "strings", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write isPalindrome(s). Return true if s reads the same forwards and backwards, ignoring case, spaces and punctuation.\nExample: 'A man, a plan, a canal: Panama' -> true",
+   "function": "isPalindrome", "params": "s",
+   "hint": "s.toLowerCase().replace(/[^a-z0-9]/g, '') then compare with the reversed string.",
+   "tests": [
+     {"args": ["A man, a plan, a canal: Panama"], "expected": true},
+     {"args": ["race a car"], "expected": false},
+     {"args": [""], "expected": true}
+   ],
+   "solution": [
+     "function isPalindrome(s) {",
+     "  const cleaned = s.toLowerCase().replace(/[^a-z0-9]/g, '');",
+     "  return cleaned === [...cleaned].reverse().join('');",
+     "}"
+   ]},
+  {"id": "js-strings-c2", "language": "javascript", "concept": "strings", "kind": "coding", "difficulty": "easy",
+   "prompt": "Write capitalizeWords(s). Capitalize the first letter of every word (words are separated by single spaces).\nExample: 'hello big world' -> 'Hello Big World'",
+   "function": "capitalizeWords", "params": "s",
+   "hint": "split(' '), map each word to word[0].toUpperCase() + word.slice(1), then join(' '). Watch out for the empty string.",
+   "tests": [
+     {"args": ["hello big world"], "expected": "Hello Big World"},
+     {"args": [""], "expected": ""},
+     {"args": ["a"], "expected": "A"}
+   ],
+   "solution": [
+     "function capitalizeWords(s) {",
+     "  return s.split(' ').map((w) => (w ? w[0].toUpperCase() + w.slice(1) : w)).join(' ');",
+     "}"
+   ]},
+
+  {"id": "js-functions-classes-q1", "language": "javascript", "concept": "functions-classes", "kind": "quick", "difficulty": "easy",
+   "prompt": "Given `const add = a => b => a + b;`, what does `add(1)(2)` return?", "answer": "3",
+   "explanation": "add(1) returns a function that remembers a = 1 (a closure). Calling it with 2 gives 3."},
+  {"id": "js-functions-classes-q2", "language": "javascript", "concept": "functions-classes", "kind": "quick", "difficulty": "medium",
+   "prompt": "What is the difference between `==` and `===`?",
+   "options": ["No difference", "=== also compares types and does no conversion; == converts types first", "== is faster", "=== only works on numbers"], "answer": "b",
+   "explanation": "0 == '0' is true (converted) but 0 === '0' is false. Use === by default."},
+  {"id": "js-functions-classes-c1", "language": "javascript", "concept": "functions-classes", "kind": "coding", "difficulty": "medium",
+   "prompt": "Write flatten(arr). Flatten arbitrarily nested arrays into one array (without using arr.flat(Infinity)).\nExample: [1, [2, [3, 4]], 5] -> [1, 2, 3, 4, 5]",
+   "function": "flatten", "params": "arr",
+   "hint": "For each item: if it is an array, flatten it recursively and add the result; otherwise add the item.",
+   "tests": [
+     {"args": [[1, [2, [3, 4]], 5]], "expected": [1, 2, 3, 4, 5]},
+     {"args": [[]], "expected": []},
+     {"args": [[[[]]]], "expected": []}
+   ],
+   "solution": [
+     "function flatten(arr) {",
+     "  const out = [];",
+     "  for (const item of arr) {",
+     "    if (Array.isArray(item)) out.push(...flatten(item));",
+     "    else out.push(item);",
+     "  }",
+     "  return out;",
+     "}"
+   ]},
+  {"id": "js-functions-classes-c2", "language": "javascript", "concept": "functions-classes", "kind": "coding", "difficulty": "medium",
+   "prompt": "Write a class Stack with push(x) (returns nothing), pop() (returns the removed item, or undefined if empty), peek() (the top item without removing it) and size().",
+   "class": "Stack",
+   "starter": "class Stack {\n  constructor() {\n  }\n}\n",
+   "hint": "Keep an array on `this.items`. Use its push, pop and length.",
+   "tests": [
+     {"init": [], "ops": [["push", 1], ["push", 2], ["peek"], ["size"], ["pop"], ["pop"], ["pop"]], "expected": [null, null, 2, 2, 2, 1, null]},
+     {"init": [], "ops": [["size"]], "expected": [0]}
+   ],
+   "solution": [
+     "class Stack {",
+     "  constructor() {",
+     "    this.items = [];",
+     "  }",
+     "  push(x) {",
+     "    this.items.push(x);",
+     "  }",
+     "  pop() {",
+     "    return this.items.pop();",
+     "  }",
+     "  peek() {",
+     "    return this.items[this.items.length - 1];",
+     "  }",
+     "  size() {",
+     "    return this.items.length;",
+     "  }",
+     "}"
+   ]},
+
+  {"id": "js-async-q1", "language": "javascript", "concept": "async", "kind": "quick", "difficulty": "medium",
+   "prompt": "What order does this print? Type the letters in order, no spaces.\nconsole.log('a');\nsetTimeout(() => console.log('b'), 0);\nPromise.resolve().then(() => console.log('c'));\nconsole.log('d');",
+   "answer": "adcb",
+   "explanation": "Sync code first (a, d). Then promise callbacks (microtasks: c) run before timers (macrotasks: b), even with a 0 ms delay."},
+  {"id": "js-async-q2", "language": "javascript", "concept": "async", "kind": "quick", "difficulty": "easy",
+   "prompt": "Where can you use the `await` keyword?",
+   "options": ["Anywhere", "Inside an async function (or at the top level of a module)", "Only in loops", "Only in classes"], "answer": "b",
+   "explanation": "await pauses an async function until a promise settles, without blocking the rest of the program."},
+  {"id": "js-async-q3", "language": "javascript", "concept": "async", "kind": "quick", "difficulty": "medium",
+   "prompt": "You need to run 3 independent network requests at the same time and wait for all of them. What do you use?",
+   "options": ["await each one in a for loop", "Promise.all([...])", "setTimeout", "Promise.resolve()"], "answer": "b",
+   "explanation": "Promise.all starts them together and resolves when every one has finished (or rejects on the first failure). Awaiting one by one makes them run in sequence, which is slower."}
+]
