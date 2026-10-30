@@ -1,0 +1,65 @@
+[
+  {
+    "id": "py-lists-quick-1",
+    "language": "python",
+    "concept": "lists",
+    "kind": "quick",
+    "prompt": "What does `[1, 2, 3][-1]` return?",
+    "answer": "3"
+  },
+  {
+    "id": "py-lists-coding-1",
+    "language": "python",
+    "concept": "lists",
+    "kind": "coding",
+    "prompt": "Write remove_duplicates(nums). Return a new list with duplicates removed, keeping the first time each number appears. Example: [1, 2, 1, 3, 2] -> [1, 2, 3].",
+    "function": "remove_duplicates",
+    "tests": [
+      {"args": [[1, 2, 1, 3, 2]], "expected": [1, 2, 3]},
+      {"args": [[]], "expected": []},
+      {"args": [[5, 5, 5]], "expected": [5]}
+    ]
+  },
+  {
+    "id": "py-dictionaries-quick-1",
+    "language": "python",
+    "concept": "dictionaries",
+    "kind": "quick",
+    "prompt": "What does `{'a': 1}.get('b', 0)` return?",
+    "answer": "0"
+  },
+  {
+    "id": "py-dictionaries-coding-1",
+    "language": "python",
+    "concept": "dictionaries",
+    "kind": "coding",
+    "prompt": "Write count_chars(text). Return a dictionary that maps each character to how many times it appears. Example: 'aab' -> {'a': 2, 'b': 1}.",
+    "function": "count_chars",
+    "tests": [
+      {"args": ["aab"], "expected": {"a": 2, "b": 1}},
+      {"args": [""], "expected": {}},
+      {"args": ["hello"], "expected": {"h": 1, "e": 1, "l": 2, "o": 1}}
+    ]
+  },
+  {
+    "id": "py-strings-quick-1",
+    "language": "python",
+    "concept": "strings",
+    "kind": "quick",
+    "prompt": "What does `'Hello'[1:4]` return?",
+    "answer": "ell"
+  },
+  {
+    "id": "py-strings-coding-1",
+    "language": "python",
+    "concept": "strings",
+    "kind": "coding",
+    "prompt": "Write is_palindrome(s). Return True if s reads the same forwards and backwards. Ignore case, spaces and punctuation. Example: 'A man, a plan, a canal: Panama' -> True.",
+    "function": "is_palindrome",
+    "tests": [
+      {"args": ["A man, a plan, a canal: Panama"], "expected": true},
+      {"args": ["race a car"], "expected": false},
+      {"args": [""], "expected": true}
+    ]
+  }
+]

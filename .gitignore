@@ -1,0 +1,12 @@
+# Secrets (none yet, but always ignored)
+.env
+
+# Python
+__pycache__/
+
+# Personal progress and answers
+data/scores.json
+solutions/
+
+# Office lock files
+~$*
