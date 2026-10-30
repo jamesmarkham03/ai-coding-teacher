@@ -2,6 +2,8 @@
 
 A terminal tutor for coding-interview prep. It teaches a concept, makes you practise it, then gives you a LeetCode-style question that is tested automatically. Every answer updates a score for that concept and that language, so it always knows what you are strong and weak at.
 
+**Built by:** James Markham, solo, in Python (standard library only) with [Claude Code](https://claude.com/claude-code). Code questions are run in a subprocess against hidden tests (Python, Node.js for JavaScript, SQLite for SQL), and the project has 96 unit tests. I built it to prep for my own interviews.
+
 **What's inside**
 - Question bank: 153 questions, 29 concepts, in Python (20 concepts), SQL (4) and JavaScript (5). Each coding question has tests and a reference solution.
 - Teach -> practice -> question sessions, taught by Claude through the `/learn` skill.
