@@ -54,7 +54,7 @@ def format_scores(scores, bank, now=None):
 
     due = due_for_review(scores, now)
     if due:
-        lines += ["", "DUE FOR REVIEW (python -m tutor learn --review)"]
+        lines += ["", "DUE FOR REVIEW (ask Claude: /learn review)"]
         lines += [f"  {d['language']}:{d['concept']}  (score {d['score']}, {d['days_since']} days since last practice)"
                   for d in due[:5]]
     lines += ["", "NEXT UP: " + next_up(scores, bank, now)]
@@ -65,7 +65,7 @@ def next_up(scores, bank, now=None):
     now = now or datetime.now()
     best = max(((lang, c) for lang in languages_in(bank) for c in concepts_for(bank, lang)),
                key=lambda pair: priority(scores, pair[0], pair[1], now=now))
-    return f"{best[0]}:{best[1]}  (python -m tutor learn --language {best[0]} --concept {best[1]})"
+    return f"{best[0]}:{best[1]}  (ask Claude: /learn {best[1]})"
 
 
 def format_history(history, limit=15):

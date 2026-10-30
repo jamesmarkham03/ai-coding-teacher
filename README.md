@@ -4,12 +4,12 @@ A terminal tutor for coding-interview prep. It teaches a concept, makes you prac
 
 **What's inside**
 - Question bank: 153 questions, 29 concepts, in Python (20 concepts), SQL (4) and JavaScript (5). Each coding question has tests and a reference solution.
-- Teach -> practice -> question sessions.
+- Teach -> practice -> question sessions, taught by Claude through the `/learn` skill.
 - Scores per concept and per language, spaced-review reminders.
 - Interview prep from a job description or a company.
 - Mock coding interviews (timed) and mock question interviews (conceptual + behavioral).
 - A checklist of general interview topics showing what you have covered and what you have missed.
-- Claude Code skills: `company-research`, `interview-prep`, `teach`, `mock-interview`.
+- Claude Code skills: `learn`, `company-research`, `interview-prep`, `mock-interview`.
 
 ## Setup
 You need Python 3.12+. JavaScript questions also need Node.js (already installed if `node --version` works). SQL uses Python's built-in SQLite. No packages to install.
@@ -20,15 +20,25 @@ python -m unittest discover -s tests -t .
 ```
 If the tests pass (they take about 20 seconds), everything works.
 
-## Daily use
-```bash
-python -m tutor learn
-```
-Picks your weakest Python concept (or one that is due for review), shows the lesson, asks two quick questions, then a coding question. For the coding question, open the file it names under `progress/solutions/`, write your answer, save, and press Enter to run the tests. Type `hint` for a hint (the answer then counts for half) or `skip` to see one way to solve it.
+## Daily use: the /learn skill
+Studying happens in Claude Code. Open this folder and type:
+
+| You type | What happens |
+|---|---|
+| `/learn` | Claude picks your weakest Python concept (or one that is due), teaches it, asks two quick questions, then gives you a coding question. |
+| `/learn joins` | Same, for a concept you name (any language). |
+| `/learn review` | A refresher on your most overdue concept. |
+| `/learn prep acme` | Studies whatever a prep plan says matters most. |
+
+For the coding question, write your answer in the file Claude names under `progress/solutions/` (or paste it in chat), and Claude runs the tests on it. Ask for a hint any time (the answer then counts for half). Claude logs each result, so your scores update.
+
+Under the hood the skill uses these commands, which you can also run yourself:
 
 | Command | What it does |
 |---|---|
-| `python -m tutor learn [--language sql] [--concept joins] [--review] [--prep NAME]` | A study session. `--review` refreshes the most overdue concept. |
+| `python -m tutor next [--concept joins] [--review] [--prep NAME]` | Which concept to study, its lesson file, and the questions in order. |
+| `python -m tutor question ID [--hint]` | Show one question (no answer). Coding questions create your solution file. |
+| `python -m tutor check ID [--answer X] [--file F] [--reveal]` | Test an answer or solution file. Exit code 0 means correct. |
 | `python -m tutor scores [--history]` | Languages strongest first, every concept's score, what is due, what to do next. |
 | `python -m tutor checklist [missing]` | General interview topics: `[x]` covered, `[~]` in progress, `[ ]` missed. |
 | `python -m tutor checklist done <id>` | Mark a manual item (resume walkthrough, questions for the interviewer) as done. |
@@ -38,7 +48,7 @@ Picks your weakest Python concept (or one that is due for review), shows the les
 | `python -m tutor mock questions [--category behavioral] [--prep NAME]` | Mock interview of concept and behavioral questions graded against a rubric. |
 | `python -m tutor company list / show slug / validate` | Researched company profiles. |
 | `python -m tutor concepts` | Every concept and its question counts. |
-| `python -m tutor record --concept python:lists --result correct` | Log a result from outside the tutor (the Claude skills use this). |
+| `python -m tutor record --concept python:lists --qid ID --result correct` | Log a result (the Claude skills use this). |
 
 ## How scoring works
 Each concept starts at 50. A right answer moves the score toward 100, a wrong one toward 0 (30% of the gap). Hard questions move it more when you get them right, easy ones move it more when you miss them. An answer that needed a hint counts half, and mock interviews count 1.25x. A language's score is the average of the concepts you have tried, and the scores screen also shows how many of its concepts you have tried. Levels: weak (under 40), building, solid (65+), strong (85+). A concept becomes due for review after 1 + score/10 days.
@@ -46,7 +56,7 @@ Each concept starts at 50. A right answer moves the score toward 100, a wrong on
 ## Interview prep flow
 1. Ask Claude: `/company-research <company>` (saves `data/companies/<slug>.json`, validated).
 2. Save the job description to a text file and run `prep new`, or ask Claude: `/interview-prep`.
-3. `learn --prep NAME` until the readiness number is where you want it.
+3. `/learn prep NAME` until the readiness number is where you want it.
 4. `mock coding --prep NAME` and `mock questions --prep NAME` as dress rehearsals.
 5. `checklist` to see what is still uncovered.
 

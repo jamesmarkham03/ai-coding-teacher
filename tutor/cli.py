@@ -1,36 +1,53 @@
 """Command line entry point:  python -m tutor <command>
 
-learn       teach -> practice -> question on one concept (picks your weakest by default)
-scores      per-concept and per-language scores, due reviews, what to do next
+Studying is done by the /learn skill in Claude Code, which uses these helpers:
+next        which concept to study next, its lesson file and the questions to ask
+question    show one question (never its answer)
+check       test an answer or a solution file for one question
+record      log a result so scores update
+
+scores     per-concept and per-language scores, due reviews, what to do next
 checklist   general interview topics: covered vs missed
 prep        build a study plan from a job description or company
 mock        timed mock coding interview, or a mock questions interview
 company     view and validate researched company profiles
-record      log a result from outside the tutor (used by the Claude skills)
 concepts    list every concept and how many questions it has
 """
 import argparse
 import sys
 from datetime import datetime
+from pathlib import Path
 
 from tutor import checklist as checklist_mod
 from tutor import companies, mock, paths, prep as prep_mod, report
 from tutor.bank import all_concept_keys, concepts_for, languages_in, load_bank, questions_for, split_key
-from tutor.history import load_history, log_event
-from tutor.scoring import load_scores, record_result, save_scores
-from tutor.session import run_learn
+from tutor.history import load_history, log_event, seen_counts
+from tutor.practice import accepted_answers, normalize, solution_path
+from tutor.runners import check_solution, starter_code
+from tutor.scoring import concept_score, days_since, level_label, load_scores, record_result, save_scores
+from tutor.session import choose_concept, lesson_path, suggest_questions
 
 
 def build_parser():
     parser = argparse.ArgumentParser(prog="python -m tutor", description="AI Coding Teacher")
     sub = parser.add_subparsers(dest="command", required=True)
 
-    learn = sub.add_parser("learn", help="teach, practice, question on one concept")
-    learn.add_argument("--language", help="python (default), sql, javascript, or 'any'")
-    learn.add_argument("--concept", help="study this concept instead of the weakest one")
-    learn.add_argument("--prep", help="pick the most useful concept from a prep plan")
-    learn.add_argument("--review", action="store_true", help="refresh the concept that is most overdue (no lesson)")
-    learn.add_argument("--quick", type=int, default=2, help="number of quick questions (default 2)")
+    nxt = sub.add_parser("next", help="pick the next concept and questions (used by /learn)")
+    nxt.add_argument("--language", help="python (default), sql, javascript, or 'any'")
+    nxt.add_argument("--concept", help="study this concept instead of the weakest one")
+    nxt.add_argument("--prep", help="pick the most useful concept from a prep plan")
+    nxt.add_argument("--review", action="store_true", help="the concept that is most overdue")
+    nxt.add_argument("--quick", type=int, default=2, help="number of quick questions (default 2)")
+
+    question = sub.add_parser("question", help="show one question without its answer")
+    question.add_argument("id")
+    question.add_argument("--hint", action="store_true", help="show the hint instead")
+
+    check = sub.add_parser("check", help="test an answer or solution file")
+    check.add_argument("id")
+    check.add_argument("--answer", help="your answer to a quick question")
+    check.add_argument("--file", help="solution file (default: the question's file in progress/solutions)")
+    check.add_argument("--reveal", action="store_true", help="also show the explanation / reference solution")
 
     scores = sub.add_parser("scores", help="show your scores")
     scores.add_argument("--history", action="store_true", help="also show your recent answers")
@@ -69,6 +86,82 @@ def build_parser():
 
     sub.add_parser("concepts", help="list concepts and question counts")
     return parser
+
+
+def find_question(bank, qid):
+    for question in bank:
+        if question["id"] == qid:
+            return question
+    raise SystemExit(f"No question with id {qid!r}. Run: python -m tutor next")
+
+
+def cmd_next(args):
+    """Print what the /learn skill needs to run one session on a concept."""
+    bank, scores = load_bank(), load_scores()
+    prep = prep_mod.load_prep(args.prep) if args.prep else None
+    language = args.language or ("any" if args.concept else "python")
+    lang, concept, reason = choose_concept(bank, scores, language, args.concept, prep, args.review)
+    entry = scores.get(lang, {}).get(concept)
+    score = concept_score(scores, lang, concept)
+    print(f"concept: {lang}:{concept}")
+    print(f"why: {reason}")
+    last = f"{round(days_since(entry, datetime.now()), 1)} days ago" if entry else "never"
+    print(f"score: {score} ({level_label(score)}), tried {entry['attempts'] if entry else 0} times, last practiced {last}")
+    print(f"lesson: {lesson_path(lang, concept)}")
+    questions = suggest_questions(bank, scores, seen_counts(load_history()), lang, concept, args.quick)
+    print("questions (in order):")
+    for q in questions:
+        print(f"  {q['id']}  [{q['kind']}, {q['difficulty']}]")
+    if not questions:
+        print("  (none yet for this concept)")
+
+
+def cmd_question(args):
+    question = find_question(load_bank(), args.id)
+    if args.hint:
+        print(question.get("hint", "No hint written for this one. Break it into the smallest case first."))
+        return
+    print(f"{question['id']}  [{question['kind']}, {question['difficulty']}, {question['language']}:{question['concept']}]")
+    print(question["prompt"])
+    for letter, option in zip("abcdefgh", question.get("options", [])):
+        print(f"   {letter}) {option}")
+    if question["kind"] == "coding":
+        path = solution_path(question)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        if not path.exists():
+            path.write_text(starter_code(question), encoding="utf-8")
+        print(f"\nsolution file: {path}")
+
+
+def cmd_check(args):
+    question = find_question(load_bank(), args.id)
+    if question["kind"] == "quick":
+        if args.answer is None:
+            raise SystemExit("Give --answer for a quick question.")
+        correct = normalize(args.answer) in {normalize(a) for a in accepted_answers(question)}
+        print("CORRECT" if correct else "INCORRECT")
+        if args.reveal or correct:
+            print("answer:", accepted_answers(question)[0])
+            print("why:", question.get("explanation", ""))
+        raise SystemExit(0 if correct else 1)
+
+    path = Path(args.file) if args.file else solution_path(question)
+    if not path.exists():
+        raise SystemExit(f"No solution file at {path}. Run: python -m tutor question {question['id']}")
+    result = check_solution(question, path.read_text(encoding="utf-8"))
+    print("PASSED" if result.passed else "FAILED", f"({result.n_passed}/{result.n_total} tests)")
+    if result.error:
+        print("problem:", result.error)
+    for failure in result.failures[:3]:
+        print("failed:", failure)
+    if result.output:
+        print("your code printed:", result.output)
+    if result.passed and question.get("complexity"):
+        c = question["complexity"]
+        print(f"typical complexity: time {c['time']}, space {c.get('space', '?')}")
+    if args.reveal:
+        print("\nreference solution:\n" + question["solution"])
+    raise SystemExit(0 if result.passed else 1)
 
 
 def cmd_scores(args):
@@ -150,6 +243,8 @@ def cmd_record(args):
         raise SystemExit("Give --concept language:concept and/or --tag.")
     correct = args.result == "correct"
     event = {"mode": args.mode, "correct": correct, "difficulty": args.difficulty}
+    if args.qid and not args.tag:
+        event["qid"] = args.qid  # lets question rotation know this one was asked
     if args.concept:
         language, concept = split_key(args.concept)
         if concept not in concepts_for(load_bank(), language):
@@ -174,7 +269,7 @@ def cmd_concepts(args):
             print(f"  {language}:{concept:<28} {quick} quick, {coding} coding")
 
 
-COMMANDS = {"scores": cmd_scores, "checklist": cmd_checklist, "prep": cmd_prep, "mock": cmd_mock,
+COMMANDS = {"next": cmd_next, "question": cmd_question, "check": cmd_check, "scores": cmd_scores, "checklist": cmd_checklist, "prep": cmd_prep, "mock": cmd_mock,
             "company": cmd_company, "record": cmd_record, "concepts": cmd_concepts}
 
 
@@ -184,13 +279,6 @@ def main(argv=None):
         if hasattr(stream, "reconfigure"):
             stream.reconfigure(encoding="utf-8", errors="replace")
     args = build_parser().parse_args(argv)
-    if args.command == "learn":
-        args.language = args.language or ("any" if args.concept else "python")
-        try:
-            run_learn(args)
-        except KeyboardInterrupt:
-            print("\nSession stopped. Nothing from the unfinished question was saved.")
-        return
     try:
         COMMANDS[args.command](args)
     except KeyboardInterrupt:

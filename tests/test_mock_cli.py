@@ -163,6 +163,64 @@ class CliTests(TempProgress):
         self.assertIn("python:lists", self.run_cli("concepts"))
         self.assertIn("No company research", self.run_cli("company", "list"))
 
+    def test_learn_skill_flow_next_question_check_record(self):
+        """The commands the /learn skill chains together, in the order it uses them."""
+        output = self.run_cli("next", "--concept", "lists")
+        self.assertIn("concept: python:lists", output)
+        self.assertIn("lesson:", output)
+        ids = [line.split()[0] for line in output.splitlines() if line.startswith("  py-")]
+        self.assertEqual(len(ids), 3)  # two quick, one coding
+
+        quick = next(i for i in ids if "-q" in i)
+        shown = self.run_cli("question", quick)
+        self.assertNotIn("answer", shown.lower().split("\n")[0])
+        with self.assertRaises(SystemExit) as wrong:
+            self.run_cli("check", quick, "--answer", "nope")
+        self.assertEqual(wrong.exception.code, 1)
+
+        coding = next(i for i in ids if "-c" in i)
+        shown = self.run_cli("question", coding)
+        self.assertIn("solution file:", shown)
+        with self.assertRaises(SystemExit) as failed:
+            self.run_cli("check", coding)  # untouched starter must fail
+        self.assertEqual(failed.exception.code, 1)
+
+        solution = {q["id"]: q for q in load_bank()}[coding]["solution"]
+        from tutor.practice import solution_path
+        solution_path({"id": coding, "language": "python"}).write_text(solution, encoding="utf-8")
+        with self.assertRaises(SystemExit) as passed:
+            self.run_cli("check", coding)
+        self.assertEqual(passed.exception.code, 0)
+
+        self.run_cli("record", "--concept", "python:lists", "--qid", coding, "--result", "correct")
+        self.assertEqual(load_history()[-1]["qid"], coding)
+        # the next session rotates away from the question that was just asked
+        again = self.run_cli("next", "--concept", "lists")
+        self.assertNotIn(coding, again)
+
+    def test_check_reveal_and_hint_and_unknown_id(self):
+        out = io.StringIO()
+        with redirect_stdout(out), self.assertRaises(SystemExit):
+            cli.main(["check", "py-lists-q1", "--answer", "5", "--reveal"])
+        self.assertIn("answer: 3", out.getvalue())
+        self.assertIn("Keep a set", self.run_cli("question", "py-lists-c1", "--hint"))
+        with self.assertRaises(SystemExit):
+            self.run_cli("question", "nope-nope")
+        with self.assertRaises(SystemExit):
+            self.run_cli("check", "py-lists-q1")  # quick question needs --answer
+
+    def test_check_works_for_sql_and_javascript_files(self):
+        sql = self.root / "q.sql"
+        sql.write_text("SELECT name FROM players WHERE team = 'Comets' ORDER BY name;", encoding="utf-8")
+        with self.assertRaises(SystemExit) as r:
+            self.run_cli("check", "sql-select-filter-c1", "--file", str(sql))
+        self.assertEqual(r.exception.code, 0)
+        js = self.root / "q.js"
+        js.write_text("function sumEvens(nums) { return 0; }", encoding="utf-8")
+        with self.assertRaises(SystemExit) as r:
+            self.run_cli("check", "js-arrays-c1", "--file", str(js))
+        self.assertEqual(r.exception.code, 1)
+
     def test_mock_history_empty(self):
         self.assertIn("No mock interviews", self.run_cli("mock", "history"))
 

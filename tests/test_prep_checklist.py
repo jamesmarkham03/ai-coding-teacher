@@ -86,7 +86,7 @@ class PrepPlanTests(TempProgress):
     def test_plan_text_flags_unsupported_and_missing_questions(self):
         text = format_plan(create_prep("acme", JD), {}, self.bank)
         self.assertIn("Not supported by this tutor yet: java", text)
-        self.assertIn("python -m tutor learn --prep acme", text)
+        self.assertIn("/learn with prep plan acme", text)
 
     def test_load_missing_plan_exits(self):
         with self.assertRaises(SystemExit):

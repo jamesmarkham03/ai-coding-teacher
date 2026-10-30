@@ -1,7 +1,7 @@
 """Interview prep mode: turn a job description (and/or a company profile) into a study plan.
 
 The plan lists which concepts matter for the role, weighted by how often the job description
-mentions them. It is saved in progress/prep/<name>.json and can drive `learn --prep` and `mock --prep`.
+mentions them. It is saved in progress/prep/<name>.json and can drive the /learn skill (`next --prep`) and `mock --prep`.
 """
 import json
 import re
@@ -159,7 +159,7 @@ def format_plan(plan, scores, bank):
         lines.append(f"  {key:<32}{weight:>6}{score:>7}  {level_label(score)}")
     if plan["checklist"]:
         lines += ["", "Also prepare (checklist): " + ", ".join(plan["checklist"])]
-    lines += ["", f"Study it:   python -m tutor learn --prep {plan['name']}",
+    lines += ["", f"Study it:   /learn with prep plan {plan['name']}  (in Claude Code)",
               f"Mock it:    python -m tutor mock coding --prep {plan['name']}",
               f"            python -m tutor mock questions --prep {plan['name']}"]
     return "\n".join(lines)

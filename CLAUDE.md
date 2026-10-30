@@ -13,12 +13,12 @@ A coding tutor for James's interview prep. Each session: teach one concept, prac
 - `tutor/cli.py`: `python -m tutor <command>`. Start here.
 - `tutor/bank.py`: loads/validates `data/bank/*.json`, picks the next question (least seen, nearest difficulty).
 - `tutor/runners.py` + `tutor/harness/`: run a solution against tests in a subprocess with a timeout (Python, JavaScript) or in-memory SQLite (SQL).
-- `tutor/practice.py`: interactive quick question and coding question (shared by sessions and mocks).
-- `tutor/session.py`: the teach -> practice -> question loop. `tutor/scoring.py`: scores, levels, review-due. `tutor/history.py`: answer log.
+- `tutor/practice.py`: interactive quick/coding question prompts used by the terminal mock interviews.
+- `tutor/session.py`: picks the next concept and questions (the teaching is the `/learn` skill). `tutor/scoring.py`: scores, levels, review-due. `tutor/history.py`: answer log.
 - `tutor/prep.py`, `tutor/companies.py`: job description reader and company profiles. `tutor/mock.py`: mock interviews. `tutor/checklist.py`, `tutor/report.py`.
 - `data/bank/` questions, `data/lessons/<language>/<concept>.md`, `data/checklist.json`, `data/taxonomy.json`, `data/interview_questions.json`, `data/companies/`.
 - `progress/`: personal state (scores, history, mocks, prep plans, solutions). Git-ignored. Tests redirect it to a temp folder via `tests/helpers.py`.
-- `.claude/skills/`: `company-research`, `interview-prep`, `teach`, `mock-interview`.
+- `.claude/skills/`: `learn`, `company-research`, `interview-prep`, `mock-interview`.
 
 ## Rules for this project
 - Keep teaching short and in plain English; explain new terms where they appear. Lessons end with an "Interview habit".
@@ -36,7 +36,7 @@ A coding tutor for James's interview prep. Each session: teach one concept, prac
 
 ## Commands
 - Tests: `python -m unittest discover -s tests -t .` (about 20 seconds).
-- Study: `python -m tutor learn`. Scores: `python -m tutor scores`. Checklist: `python -m tutor checklist`.
+- Study: the `/learn` skill (helpers: `python -m tutor next | question | check | record`). Scores: `python -m tutor scores`. Checklist: `python -m tutor checklist`.
 - Prep: `python -m tutor prep new NAME --file jd.txt --company slug`. Mock: `python -m tutor mock coding` / `mock questions`.
 
 ## Ideas not built yet

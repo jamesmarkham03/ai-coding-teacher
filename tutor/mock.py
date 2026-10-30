@@ -139,7 +139,7 @@ def coding_feedback(results):
     elif not solved:
         notes.append("Nothing passed this time. Go back to the lesson for the weakest concept, then retry.")
     else:
-        notes.append("Partial. Review the reference solutions above and redo the missed concept with `learn`.")
+        notes.append("Partial. Review the reference solutions above and redo the missed concept with /learn in Claude Code.")
     if any(o.attempts > 4 for o in solved):
         notes.append("You needed many test runs. Trace one example by hand before running code.")
     if any(o.complexity_ok is False for o in solved):

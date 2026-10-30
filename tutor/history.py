@@ -1,7 +1,7 @@
 """An append-only log of every answer. Scores are a summary; this is the full record.
 
 Each event: {"ts", "mode", "language", "concept", "qid", "correct", ...}.
-mode is one of: learn, review, mock, qa, record.
+mode is one of: learn, review (from the /learn skill), mock, qa, record.
 """
 from datetime import datetime
 
